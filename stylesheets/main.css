@@ -105,14 +105,43 @@ body {
     bottom: 1.5rem;
     right: 1rem; }
     .content_widgets .container_btn button {
-      padding: 5.5rem 3rem;
-      font-size: 2.3rem;
+      padding: 2.5rem 1rem;
+      font-size: 1.5rem;
       -webkit-border-radius: 50%;
       -khtml-border-radius: 50%;
       -moz-border-radius: 50%;
       -ms-border-radius: 50%;
       -o-border-radius: 50%;
       border-radius: 50%; }
+      .content_widgets .container_btn button.restart {
+        padding: 2.5rem 0.5rem;
+        background: #d32f2f;
+        border-color: #d32f2f;
+        -webkit-box-shadow: 0 5px #ef5350;
+        -khtml-box-shadow: 0 5px #ef5350;
+        -moz-box-shadow: 0 5px #ef5350;
+        -ms-box-shadow: 0 5px #ef5350;
+        -o-box-shadow: 0 5px #ef5350;
+        box-shadow: 0 5px #ef5350; }
+        .content_widgets .container_btn button.restart:hover {
+          top: 2px;
+          -webkit-box-shadow: 0 3px #ef5350;
+          -khtml-box-shadow: 0 3px #ef5350;
+          -moz-box-shadow: 0 3px #ef5350;
+          -ms-box-shadow: 0 3px #ef5350;
+          -o-box-shadow: 0 3px #ef5350;
+          box-shadow: 0 3px #ef5350;
+          outline: none; }
+        .content_widgets .container_btn button.restart:focus {
+          outline: none; }
+        .content_widgets .container_btn button.restart:active {
+          top: 5px;
+          -webkit-box-shadow: 0 0px #ef5350;
+          -khtml-box-shadow: 0 0px #ef5350;
+          -moz-box-shadow: 0 0px #ef5350;
+          -ms-box-shadow: 0 0px #ef5350;
+          -o-box-shadow: 0 0px #ef5350;
+          box-shadow: 0 0px #ef5350; }
 
 .widget {
   max-width: 90px;

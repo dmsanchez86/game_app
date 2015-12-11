@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "first_result": 24,
+            "second_result": 31,
+            "third_result": 25,
+            "fourth_result": 19
+        },{
+            "first_result": 15,
+            "second_result": 19,
+            "third_result": 34,
+            "fourth_result": 67
+        },{
+            "first_result": 31,
+            "second_result": 11,
+            "third_result": 22,
+            "fourth_result": 14
+        },{
+            "first_result": 56,
+            "second_result": 67,
+            "third_result": 78,
+            "fourth_result": 34
+        }
+    ]
+}

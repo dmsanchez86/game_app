@@ -52,9 +52,31 @@ body{
         right: 1rem;
         
         button{
-            padding: 5.5rem 3rem;
-            font-size: 2.3rem;
+            padding: 2.5rem 1rem;
+            font-size: 1.5rem;
             @include border-radius(50%);
+            
+            &.restart{
+                padding: 2.5rem 0.5rem;
+                background: #d32f2f;
+                border-color: #d32f2f;
+                @include box-shadow(( 0 5px #ef5350 ));
+                
+                &:hover{
+    				top: 2px;
+    				@include box-shadow(0 3px #ef5350);
+    				outline: none;
+    			}
+    
+    			&:focus{
+    				outline: none;
+    			}
+    
+    			&:active{
+    				top: 5px;
+    				@include box-shadow(0 0px #ef5350);
+    			}
+            }
         }
     }
 }
