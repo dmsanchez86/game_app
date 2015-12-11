@@ -59,35 +59,22 @@ window.onload = function(){
     
     // Evento que me limpia todos los campos
     $('#btn_restart').unbind('click').click(function(){
-        $('.widget[position]').attr('data-value', '').find('.value_input').val('');
+        $('.widget[position]').removeAttr('data-value').find('.value_input').val('');
     });
     
     // Evento que valida el juego
     $('#btn_validate').unbind('click').click(function(){
-        // Guardo todas las posiciones
-        var a1 = $('.widget[position="a1"]');
-        var b1 = $('.widget[position="b1"]');
-        var c1 = $('.widget[position="c1"]');
-        var d1 = $('.widget[position="d1"]');
-        var a2 = $('.widget[position="a2"]');
-        var b2 = $('.widget[position="b2"]');
-        var c2 = $('.widget[position="c2"]');
-        var d2 = $('.widget[position="d2"]');
-        var a3 = $('.widget[position="a3"]');
-        var b3 = $('.widget[position="b3"]');
-        var a4 = $('.widget[position="a4"]');
-        var b4 = $('.widget[position="b4"]');
-        
-        
+        validate_game();
     });
 }
 
-// Funcion que carga los resultados
+// Funcion que se llama al momento de que la página este cargada
 function init(){
     // Funcion que me pone los resultados
     load_results();
 }
 
+// Funcion que carga los resultados
 function load_results(){
     // divs de los resultados
     var r1 = $('.widget.result[result="r1"]');
@@ -130,4 +117,27 @@ function load_results(){
             
         }
     });
+}
+
+function validate_game(){
+    // Guardo todas las posiciones
+    debugger
+    var a1 = $('.widget[position="a1"]').attr('data-value');
+    var b1 = $('.widget[position="b1"]').attr('data-value');
+    var c1 = $('.widget[position="c1"]').attr('data-value');
+    var d1 = $('.widget[position="d1"]').attr('data-value');
+    var a2 = $('.widget[position="a2"]').attr('data-value');
+    var b2 = $('.widget[position="b2"]').attr('data-value');
+    var c2 = $('.widget[position="c2"]').attr('data-value');
+    var d2 = $('.widget[position="d2"]').attr('data-value');
+    var a3 = $('.widget[position="a3"]').attr('data-value');
+    var b3 = $('.widget[position="b3"]').attr('data-value');
+    var a4 = $('.widget[position="a4"]').attr('data-value');
+    var b4 = $('.widget[position="b4"]').attr('data-value');
+    
+    // valida si inserto numeros en todos los campos
+    if(a1 == undefined || a2 == undefined || a3 == undefined || a4 == undefined || b1 == undefined || b2 == undefined || b3 == undefined || b4 == undefined || c1 == undefined || c2 == undefined || d1 == undefined || d2 == undefined){
+        alert('Ingrese todos los números');
+    }
+    
 }
