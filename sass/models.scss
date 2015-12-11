@@ -1,0 +1,35 @@
+@mixin button_default {
+	.container_btn{
+		position: relative;
+		text-align: center;
+
+		button{
+			background-color: #323232;
+			padding: .5rem 15.3%;
+			color: white;
+			border: solid thin #323232;
+			display: inline-block;
+			text-transform: uppercase;
+			position: relative;
+			font-size: 1.8rem;
+			@include box-shadow(0 5px #111);
+			@include border-radius(2px);
+			overflow: hidden;
+
+			&:hover{
+				top: 2px;
+				@include box-shadow(0 3px #111);
+				outline: none;
+			}
+
+			&:focus{
+				outline: none;
+			}
+
+			&:active{
+				top: 5px;
+				@include box-shadow(0 0px #111);
+			}
+		}
+	}
+}

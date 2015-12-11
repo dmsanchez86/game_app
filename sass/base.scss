@@ -1,0 +1,169 @@
+@import 'variables';
+@import 'functions';
+@import 'models';
+
+*{
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body{
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    font-size: 100%;
+    
+}
+
+.main_app{
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    @include flex(flex);
+    @include align-items(center);
+    @include justify-content(center);
+}
+
+.content_widgets{
+    max-width: 100%;
+    border: solid thin #aaa;
+    padding: .5rem;
+    @include perspective(1000px);
+    @include perspective-origin(50% 40%);
+    
+    .row_widgets{
+        @include flex('flex');
+        
+        &.separator{
+            min-height: 15px;
+        }
+    }
+    
+    @include button_default;
+    
+    .container_btn{
+        position: absolute;
+        bottom: 1.5rem;
+        right: 1rem;
+        
+        button{
+            padding: 5.5rem 3rem;
+            font-size: 2.3rem;
+            @include border-radius(50%);
+        }
+    }
+}
+
+.widget{
+    max-width: $relative_size;
+    min-width: $relative_size;
+    margin:  .5rem;
+    min-height: $relative_size;
+    cursor: pointer;
+    position: relative;
+    
+    &:before{
+        width: 100%;
+        min-height: $relative_size;
+        content: '';
+        display: block;
+        border: solid thin #42a5f5;
+        background: #42a5f5;
+        z-index: -1;
+        @include transition( (transform .5s ease, box-shadow .5s .5s ease ));
+        @include transform-origin(left center);
+    }
+    
+    &:after{
+        width: 100%;
+        min-height: $relative_size;
+        content: attr(data-value);
+        display: block;
+        background: #bbdefb;
+        color: white;
+        font-size: 57px;
+        text-align: center;
+        z-index: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        @include text-shadow((0 0 2px #323232));
+        @include transition(( transform .5s .25s ease, z-index .2s linear));
+        @include transform(scale(1));
+        @include transform-origin(center);
+    }
+    
+    &.edit,
+    &:hover,
+    &:focus{
+        
+        &:before{
+            @include box-shadow(( 0 0 5px rgba(0,0,0,.5) ));
+            @include transform((rotatey(180deg) translateX(-100%)));
+        }
+        
+        &:after{
+            z-index: -1;
+            @include transform((scale(1)));
+        }
+    }
+    
+    &.result{
+        &:after{
+            background: #a5d6a7;
+        }
+        
+        &:before{
+            border: solid thin #43a047;
+            background: #43a047;
+        }
+    }
+    
+    &.edit{
+        .value{
+            z-index: 5;
+            
+            .value_input{
+                opacity: 1;
+            }
+        }
+    }
+    
+    .value{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: $relative_size;
+        z-index: -2;
+        padding: 1rem;
+        
+        .value_input{
+            opacity: 0;
+            border-color: transparent;
+            color: white;
+            font-size: 50px;
+            overflow: visible;
+            height: auto;
+            margin: 0;
+            text-align: center;
+            @include box-shadow(none);
+            @include transition(all .5s ease);
+            
+            &:focus{
+                border-color: transparent;
+                @include box-shadow(none);
+            }
+        }
+    }
+}
+
+.separator{
+    min-width: 15px;
+    min-height: $relative_size;
+}

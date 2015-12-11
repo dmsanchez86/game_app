@@ -164,6 +164,11 @@
   font-weight: $weight;
 }
 
+// Funtion to set text-shadow
+@mixin text-shadow($value) {
+  @include prefixes(text-shadow , $value);
+}
+
 // Funtion to set transition
 @mixin transition($value) {
   @include prefixes(transition, $value);
