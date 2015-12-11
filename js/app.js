@@ -22,13 +22,13 @@ window.onload = function(){
         element.find('.value_input').blur();
     });
         
-    // cuando este focus
+    // cuando este focus el widget
     $('.widget').unbind('focus').focus(function(e){
         var element = $(this);
         element.addClass("edit");
     });
         
-    // cuando pierda el foco
+    // cuando pierda el foco el widget
     $('.widget').unbind('blur').blur(function(e){
         var element = $(this);
         element.removeClass("edit");
@@ -41,11 +41,20 @@ window.onload = function(){
     
     // Evento cuando los input de los widgets pierden el foco
     $('.value_input').unbind('blur').blur(function(){
-        $(this).parent().parent().removeClass('edit');
         
         var value = $(this).val();
         
-        $(this).parent().parent().attr('data-value', value);
+        // Si no es un número o es mayor a 100 que ya tiene 3 cifras
+        if(isNaN(value) || value > 99){
+            $(this).parent().parent().attr('data-value', '');
+            $(this).val('');
+        }else {
+            $(this).parent().parent().attr('data-value', value);
+        }
+        
+        // le quito al widget la clase edit
+        $(this).parent().parent().removeClass('edit');
+        
     });
     
     // Evento que me limpia todos los campos
