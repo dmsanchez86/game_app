@@ -142,6 +142,35 @@ body {
           -ms-box-shadow: 0 0px #ef5350;
           -o-box-shadow: 0 0px #ef5350;
           box-shadow: 0 0px #ef5350; }
+      .content_widgets .container_btn button.new {
+        padding: 2.5rem 1.5rem;
+        background: #29b6f6;
+        border-color: #29b6f6;
+        -webkit-box-shadow: 0 5px #0288d1;
+        -khtml-box-shadow: 0 5px #0288d1;
+        -moz-box-shadow: 0 5px #0288d1;
+        -ms-box-shadow: 0 5px #0288d1;
+        -o-box-shadow: 0 5px #0288d1;
+        box-shadow: 0 5px #0288d1; }
+        .content_widgets .container_btn button.new:hover {
+          top: 2px;
+          -webkit-box-shadow: 0 3px #0288d1;
+          -khtml-box-shadow: 0 3px #0288d1;
+          -moz-box-shadow: 0 3px #0288d1;
+          -ms-box-shadow: 0 3px #0288d1;
+          -o-box-shadow: 0 3px #0288d1;
+          box-shadow: 0 3px #0288d1;
+          outline: none; }
+        .content_widgets .container_btn button.new:focus {
+          outline: none; }
+        .content_widgets .container_btn button.new:active {
+          top: 5px;
+          -webkit-box-shadow: 0 0px #0288d1;
+          -khtml-box-shadow: 0 0px #0288d1;
+          -moz-box-shadow: 0 0px #0288d1;
+          -ms-box-shadow: 0 0px #0288d1;
+          -o-box-shadow: 0 0px #0288d1;
+          box-shadow: 0 0px #0288d1; }
 
 .widget {
   max-width: 90px;
@@ -150,6 +179,13 @@ body {
   min-height: 90px;
   cursor: pointer;
   position: relative; }
+  .widget:before, .widget:after {
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px; }
   .widget:before {
     width: 100%;
     min-height: 90px;
@@ -228,11 +264,14 @@ body {
     -ms-transform: scale(1);
     -o-transform: scale(1);
     transform: scale(1); }
-  .widget.result:after {
-    background: #a5d6a7; }
-  .widget.result:before {
-    border: solid thin #43a047;
-    background: #43a047; }
+  .widget.result {
+    cursor: default; }
+    .widget.result:after {
+      background: #43a047; }
+    .widget.result:before {
+      display: none;
+      border: solid thin #43a047;
+      background: #43a047; }
   .widget.edit .value {
     z-index: 5; }
     .widget.edit .value .value_input {
@@ -276,7 +315,67 @@ body {
         box-shadow: none; }
 
 .separator {
+  margin: .5rem;
   min-width: 15px;
-  min-height: 90px; }
+  min-height: 90px;
+  max-height: 90px; }
+
+.operator {
+  background-image: url(../images/operators.png);
+  background-size: 100%;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: all 0.5s ease;
+  -khtml-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+  .operator[sum] {
+    background-position: 0px 0px; }
+  .operator[subtraction] {
+    background-position: 0px -90px; }
+  .operator[multiplication] {
+    background-position: 0 -180px; }
+  .operator[division] {
+    background-position: 0 -270px; }
+  .operator.active .menu_operators {
+    left: 165%;
+    opacity: 1;
+    z-index: 10; }
+  .operator .menu_operators {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    background: white;
+    border: solid #323232 thin;
+    opacity: 0;
+    -webkit-transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6);
+    -khtml-transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6);
+    -moz-transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6);
+    -ms-transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6);
+    -o-transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6);
+    transition: all 0.5s cubic-bezier(0.08, 0.51, 0.2, 1.6); }
+    .operator .menu_operators > div {
+      height: calc(90px / 4);
+      padding: 0 .25rem;
+      cursor: pointer;
+      color: #323232; }
+      .operator .menu_operators > div:hover {
+        background: #a5d6a7;
+        color: white;
+        -webkit-text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        -khtml-text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        -moz-text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        -ms-text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        -o-text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); }
+    .operator .menu_operators .close_menu {
+      position: absolute;
+      top: -1%;
+      right: 5.8%;
+      font-weight: bold; }
+      .operator .menu_operators .close_menu:hover {
+        color: #ef5350; }
 
 /*# sourceMappingURL=main.css.map */

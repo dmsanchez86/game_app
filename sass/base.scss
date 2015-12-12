@@ -77,6 +77,28 @@ body{
     				@include box-shadow(0 0px #ef5350);
     			}
             }
+            
+            &.new{
+                padding: 2.5rem 1.5rem;
+                background: #29b6f6;
+                border-color: #29b6f6;
+                @include box-shadow(( 0 5px #0288d1 ));
+                
+                &:hover{
+    				top: 2px;
+    				@include box-shadow(0 3px #0288d1);
+    				outline: none;
+    			}
+    
+    			&:focus{
+    				outline: none;
+    			}
+    
+    			&:active{
+    				top: 5px;
+    				@include box-shadow(0 0px #0288d1);
+    			}
+            }
         }
     }
 }
@@ -88,6 +110,11 @@ body{
     min-height: $relative_size;
     cursor: pointer;
     position: relative;
+    
+    &:before,
+    &:after{
+        @include border-radius(5px);
+    }
     
     &:before{
         width: 100%;
@@ -136,11 +163,14 @@ body{
     }
     
     &.result{
+        cursor: default;
+        
         &:after{
-            background: #a5d6a7;
+            background: #43a047;
         }
         
         &:before{
+            display: none;
             border: solid thin #43a047;
             background: #43a047;
         }
@@ -186,6 +216,73 @@ body{
 }
 
 .separator{
+    margin: .5rem;
     min-width: 15px;
     min-height: $relative_size;
+    max-height: $relative_size;
+}
+
+.operator{
+    background-image: url(../images/operators.png);
+    background-size: 100%;
+    cursor: pointer;
+    position: relative;
+    @include transition(all .5s ease);
+    
+    &[sum]{
+        background-position: 0px 0px;
+    }
+    
+    &[subtraction]{
+        background-position: 0px -90px;
+    }
+    
+    &[multiplication]{
+        background-position: 0 -180px;
+    }
+    &[division]{
+        background-position: 0 -270px;
+    }
+    
+    &.active{
+        .menu_operators{
+            left: 165%;
+            opacity: 1;
+            z-index: 10;
+        }
+    }
+    
+    .menu_operators{
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        background: white;
+        border: solid #323232 thin;
+        opacity: 0;
+        @include transition(all .5s cubic-bezier(0.08, 0.51, 0.2, 1.6));
+        
+        > div{
+            height: calc(90px / 4);
+            padding: 0 .25rem;
+            cursor: pointer;
+            color: #323232;
+            
+            &:hover{
+                background: #a5d6a7;
+                color: white;
+                @include text-shadow(0 0 2px rgba(0,0,0,.5));
+            }
+        }
+        
+        .close_menu{
+            position: absolute;
+            top: -1%;
+            right: 5.8%;
+            font-weight: bold;
+            
+            &:hover{
+                color: #ef5350;
+            }
+        }
+    }
 }
