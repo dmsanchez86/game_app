@@ -87,7 +87,7 @@ window.onload = function(){
         $('.operator').removeClass('active');
         
         // Le añado la clase active al que se le da click
-        $(this).addClass('active');
+        // $(this).addClass('active');
     });
     
     // Evento que cierra el menu de los operadores
@@ -149,25 +149,42 @@ function load_results(){
 }
 
 // funcion que valida si el juego es correcto o incorrecto
-function validate_game(){
+function validate_game(){debugger
     // Guardo todas las posiciones
     
-    var a1 = $('.widget[position="a1"]').attr('data-value');
-    var b1 = $('.widget[position="b1"]').attr('data-value');
-    var c1 = $('.widget[position="c1"]').attr('data-value');
-    var d1 = $('.widget[position="d1"]').attr('data-value');
-    var a2 = $('.widget[position="a2"]').attr('data-value');
-    var b2 = $('.widget[position="b2"]').attr('data-value');
-    var c2 = $('.widget[position="c2"]').attr('data-value');
-    var d2 = $('.widget[position="d2"]').attr('data-value');
-    var a3 = $('.widget[position="a3"]').attr('data-value');
-    var b3 = $('.widget[position="b3"]').attr('data-value');
-    var a4 = $('.widget[position="a4"]').attr('data-value');
-    var b4 = $('.widget[position="b4"]').attr('data-value');
+    var a1 = parseInt($('.widget[position="a1"]').attr('data-value'));
+    var b1 = parseInt($('.widget[position="b1"]').attr('data-value'));
+    var c1 = parseInt($('.widget[position="c1"]').attr('data-value'));
+    var d1 = parseInt($('.widget[position="d1"]').attr('data-value'));
+    var a2 = parseInt($('.widget[position="a2"]').attr('data-value'));
+    var b2 = parseInt($('.widget[position="b2"]').attr('data-value'));
+    var c2 = parseInt($('.widget[position="c2"]').attr('data-value'));
+    var d2 = parseInt($('.widget[position="d2"]').attr('data-value'));
+    var a3 = parseInt($('.widget[position="a3"]').attr('data-value'));
+    var b3 = parseInt($('.widget[position="b3"]').attr('data-value'));
+    var a4 = parseInt($('.widget[position="a4"]').attr('data-value'));
+    var b4 = parseInt($('.widget[position="b4"]').attr('data-value'));
     
     // valida si inserto numeros en todos los campos
-    if(a1 == undefined || a2 == undefined || a3 == undefined || a4 == undefined || b1 == undefined || b2 == undefined || b3 == undefined || b4 == undefined || c1 == undefined || c2 == undefined || d1 == undefined || d2 == undefined){
+    if(isNaN(a1) || isNaN(a2) || isNaN(a3) || isNaN(a4) || isNaN(b1) || isNaN(b2) || isNaN(b3) || isNaN(b4) || isNaN(c1) || isNaN(c2) || isNaN(d1) || isNaN(d2)){
         alert('Ingrese todos los números');
+    }else{
+        var result_1 = a1 + b1 + c1 + d1;
+        var result_2 = a2 + b2 + c2 + d2;
+        var result_3 = a1 + a2 + a3 + a4;
+        var result_4 = b1 + b2 + b3 + b4;
+        
+        var res1 = parseInt(r1.attr('data-value'));
+        var res2 = parseInt(r2.attr('data-value'));
+        var res3 = parseInt(r3.attr('data-value'));
+        var res4 = parseInt(r4.attr('data-value'));
+        
+        if(result_1 == res1 && result_2 == res2 && result_3 == res3 && result_4 == res4 )
+            alert('¡GANASTE!');
+        else
+            alert('¡PERDISTE!');
+            
+        btn_new.click();
     }
     
 }

@@ -55,7 +55,8 @@ body {
     display: -o-flex;
     display: "flex"; }
     .content_widgets .row_widgets.separator {
-      min-height: 15px; }
+      min-height: 25px;
+      max-height: 25px; }
   .content_widgets .container_btn {
     position: relative;
     text-align: center; }
@@ -319,6 +320,11 @@ body {
   min-width: 15px;
   min-height: 90px;
   max-height: 90px; }
+  .separator.small {
+    min-width: 15px;
+    max-width: 15px;
+    min-height: 15px;
+    max-height: 15px; }
 
 .operator {
   background-image: url(../images/operators.png);
@@ -343,6 +349,9 @@ body {
     left: 165%;
     opacity: 1;
     z-index: 10; }
+  .operator.active.vertical .menu_operators {
+    left: initial;
+    top: 200%; }
   .operator .menu_operators {
     position: absolute;
     left: 0;
@@ -377,5 +386,27 @@ body {
       font-weight: bold; }
       .operator .menu_operators .close_menu:hover {
         color: #ef5350; }
+  .operator.vertical {
+    max-height: 15px;
+    min-height: 15px;
+    min-width: 90px;
+    margin: .5rem;
+    max-width: 90px;
+    background-position: 0px 0;
+    background-image: url(../images/operators_vertical.png);
+    background-size: 360px; }
+    .operator.vertical .menu_operators {
+      top: -100%;
+      left: initial; }
+    .operator.vertical:nth-child(1) {
+      margin: .5rem .5rem .5rem 0; }
+    .operator.vertical[sum] {
+      background-position: 0px 0px; }
+    .operator.vertical[subtraction] {
+      background-position: -90px 0; }
+    .operator.vertical[multiplication] {
+      background-position: -180px 0; }
+    .operator.vertical[division] {
+      background-position: -270px 0; }
 
 /*# sourceMappingURL=main.css.map */
