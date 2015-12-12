@@ -42,7 +42,7 @@ window.onload = function(){
     
     // Evento cuando los input de los widgets obtinene el foco
     $('.value_input').unbind('focus').focus(function(){
-        $(this).parent().parent().addClass('edit');
+        $(this).parent().parent().addClass('edit').removeClass('valid');
     });
     
     // Evento cuando los input de los widgets pierden el foco
@@ -51,11 +51,13 @@ window.onload = function(){
         var value = $(this).val();
         
         // Si no es un número o es mayor a 100 que ya tiene 3 cifras o si es menor que -99
-        if(isNaN(value) || value > 99 || value < -99){
+        if(isNaN(value) || value > 99 || value < -99 || value == ""){
             $(this).parent().parent().attr('data-value', '');
             $(this).val('');
+            $(this).parent().parent().removeClass('valid');
         }else {
             $(this).parent().parent().attr('data-value', value);
+            $(this).parent().parent().addClass('valid');
         }
         
         // le quito al widget la clase edit
@@ -65,7 +67,7 @@ window.onload = function(){
     
     // Evento que me limpia todos los campos
     $('#btn_restart').unbind('click').click(function(){
-        $('.widget[position]').removeAttr('data-value').find('.value_input').val('');
+        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
         $('.operator').removeAttr('sum subtraction multiplication division');
     });
     
@@ -76,7 +78,7 @@ window.onload = function(){
     
     // Evento que cambia el juego
     $('#btn_new').unbind('click').click(function(){
-        $('.widget[position]').removeAttr('data-value').find('.value_input').val('');
+        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
         $('.operator').removeAttr('sum subtraction multiplication division');
         new_game();
     });

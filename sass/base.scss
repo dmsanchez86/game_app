@@ -187,6 +187,17 @@ body{
         }
     }
     
+    &.valid{
+        &:before{
+            display: none;
+        }
+        
+        &:after{
+            background: #42a5f5;
+            @include box-shadow(( 0 0 5px rgba(0,0,0,.5) ));
+        }
+    }
+    
     .value{
         position: absolute;
         top: 0;

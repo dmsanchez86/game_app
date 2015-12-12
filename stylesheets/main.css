@@ -277,6 +277,16 @@ body {
     z-index: 5; }
     .widget.edit .value .value_input {
       opacity: 1; }
+  .widget.valid:before {
+    display: none; }
+  .widget.valid:after {
+    background: #42a5f5;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -khtml-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); }
   .widget .value {
     position: absolute;
     top: 0;
