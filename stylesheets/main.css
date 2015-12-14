@@ -172,6 +172,42 @@ body {
           -ms-box-shadow: 0 0px #0288d1;
           -o-box-shadow: 0 0px #0288d1;
           box-shadow: 0 0px #0288d1; }
+  .content_widgets .container_results {
+    position: absolute;
+    bottom: 150px;
+    right: 4rem; }
+    .content_widgets .container_results img {
+      max-width: 270px; }
+    .content_widgets .container_results > span {
+      min-width: 90px;
+      position: absolute;
+      top: 0;
+      color: white;
+      font-weight: bold;
+      font-family: 'Roboto';
+      font-size: 1.2rem; }
+    .content_widgets .container_results .name {
+      margin: auto;
+      top: 5px;
+      left: 0;
+      right: 0;
+      text-align: center; }
+    .content_widgets .container_results .time {
+      right: 0;
+      left: 54px;
+      margin: auto;
+      top: -36px;
+      bottom: 0;
+      height: 25px;
+      width: 90px; }
+    .content_widgets .container_results .points {
+      right: 0;
+      left: 54px;
+      margin: auto;
+      top: 40px;
+      bottom: 0;
+      height: 25px;
+      width: 90px; }
 
 .widget {
   max-width: 90px;

@@ -102,6 +102,54 @@ body{
             }
         }
     }
+    
+    .container_results{
+        position: absolute;
+        bottom: 150px;
+        right: 4rem;
+        
+        img{
+            max-width: 270px;
+        }
+        
+        > span{
+            min-width: 90px;
+            position: absolute;
+            top: 0;
+            color: white;
+            font-weight: bold;
+            font-family: 'Roboto';
+            font-size: 1.2rem;
+        }
+
+        .name{
+            margin: auto;
+            top: 5px;
+            left: 0;
+            right: 0;
+            text-align:center;
+        }
+        
+        .time{
+            right: 0;
+            left: 54px;
+            margin: auto;
+            top: -36px;
+            bottom: 0;
+            height: 25px;
+            width: 90px;
+        }
+        
+        .points{
+            right: 0;
+            left: 54px;
+            margin: auto;
+            top: 40px;
+            bottom: 0;
+            height: 25px;
+            width: 90px;
+        }
+    }
 }
 
 .widget{

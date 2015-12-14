@@ -6,6 +6,9 @@ var r2 = $('.widget.result[result="r2"]');
 var r3 = $('.widget.result[result="r3"]');
 var r4 = $('.widget.result[result="r4"]');
 
+// variable que me controlara el tiempo del cronometro
+var time_interval = null; 
+
 // Carga de la página
 window.onload = function(){
     
@@ -69,6 +72,8 @@ window.onload = function(){
     $('#btn_restart').unbind('click').click(function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
         $('.operator').removeAttr('sum subtraction multiplication division');
+        clearInterval(time_interval);
+        time();
     });
     
     // Evento que valida el juego
@@ -81,6 +86,8 @@ window.onload = function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
         $('.operator').removeAttr('sum subtraction multiplication division');
         new_game();
+        clearInterval(time_interval);
+        time();
     });
     
     // evento de los operadores
@@ -107,8 +114,21 @@ window.onload = function(){
 
 // Funcion que se llama al momento de que la página este cargada
 function init(){
-    // Funcion que me pone los resultados
-    load_results();
+    // Pido el nombre al usuario
+    var name = prompt("Ingrese el nombre del jugador","player__001");
+    
+    if(name == "" || name == undefined){
+        location.reload();
+        return;
+    }else{
+        // cargo el nombre del usuario
+        $('.container_results .name').text(name);
+        
+        // Funcion que me pone los resultados
+        load_results();
+        time();
+    }
+    
 }
 
 // Funcion que carga los resultados
@@ -151,7 +171,7 @@ function load_results(){
 }
 
 // funcion que valida si el juego es correcto o incorrecto
-function validate_game(){debugger
+function validate_game(){
     // Guardo todas las posiciones
     
     var a1 = parseInt($('.widget[position="a1"]').attr('data-value'));
@@ -225,4 +245,42 @@ function new_game(){
     r3.attr('data-value', new_result.third_result);
     r4.attr('data-value', new_result.fourth_result);
     
+}
+
+// funcion que hace correr el tiempo
+function time(){
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    var string_time = "";
+    time_interval = setInterval(function(){
+        seconds++;
+        
+        if(seconds > 59){
+            minutes++;
+            
+            if(minutes > 59){
+                hours++;
+                minutes = 0;
+            }
+            seconds = 0;
+        }
+        
+        if(hours < 10){
+            string_time = "0"+hours+':'+minutes+":"+seconds;
+            if(minutes < 10){
+                string_time = "0"+hours+':0'+minutes+":"+seconds;
+                if(seconds < 10){
+                    string_time = "0"+hours+':0'+minutes+":0"+seconds
+                }
+            }else{
+                string_time = "0"+hours+':'+minutes+":"+seconds;
+                if(seconds < 10){
+                    string_time = "0"+hours+':'+minutes+":0"+seconds
+                }
+            }
+        }
+        
+        $('.container_results .time').text(string_time);
+    },1000);
 }
