@@ -114,21 +114,32 @@ window.onload = function(){
 
 // Funcion que se llama al momento de que la página este cargada
 function init(){
-    // Pido el nombre al usuario
-    var name = prompt("Ingrese el nombre del jugador","player__001");
-    
-    if(name == "" || name == undefined){
-        location.reload();
-        return;
-    }else{
-        // cargo el nombre del usuario
-        $('.container_results .name').text(name);
+    // cargo un nombre si ya se ha seleccionado
+    if(localStorage.getItem('name') != null){
+        $('.container_results .name').text(localStorage.getItem('name'));
         
         // Funcion que me pone los resultados
         load_results();
         time();
+    }else{
+        // Pido el nombre al usuario
+        var name = prompt("Ingrese el nombre del jugador","player__001");
+        
+        if(name == "" || name == undefined){
+            location.reload();
+            return;
+        }else{
+            // cargo el nombre del usuario
+            $('.container_results .name').text(name);
+            
+            // Guardo el nombre en un local storage
+            localStorage.setItem('name', name)
+            
+            // Funcion que me pone los resultados
+            load_results();
+            time();
+        }
     }
-    
 }
 
 // Funcion que carga los resultados
@@ -250,20 +261,19 @@ function new_game(){
 // funcion que hace correr el tiempo
 function time(){
     var hours = 0;
-    var minutes = 0;
-    var seconds = 0;
+    var minutes = 2;
+    var seconds = 60;
     var string_time = "";
     time_interval = setInterval(function(){
-        seconds++;
+        seconds--;
         
-        if(seconds > 59){
-            minutes++;
+        if(seconds < 0){
+            minutes--;
             
-            if(minutes > 59){
-                hours++;
+            if(minutes < 0){
                 minutes = 0;
             }
-            seconds = 0;
+            seconds = 59;
         }
         
         if(hours < 10){
