@@ -38,7 +38,7 @@ label{
 
 .content_widgets{
     max-width: 100%;
-    background: white;
+    background: transparent;
     padding: .5rem;
     backface-visibility: hidden;
     @include transform(rotatey(180deg));

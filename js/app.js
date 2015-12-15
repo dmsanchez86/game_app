@@ -33,7 +33,7 @@ var time_interval = null;
 window.onload = function(){
         
     // hover del widget que pone el foco en el input
-    $('.widget:not(.result)').unbind('mouseenter').mouseenter(function(e){
+    $('.widget:not(.result, .valid)').unbind('mouseenter').mouseenter(function(e){
         var element = $(this);
         element.addClass("edit");
         
@@ -41,7 +41,7 @@ window.onload = function(){
     });
     
     // cuando sale del hover
-    $('.widget:not(.result)').unbind('mouseleave').mouseleave(function(e){
+    $('.widget:not(.result, .valid)').unbind('mouseleave').mouseleave(function(e){
         var element = $(this);
         element.removeClass("edit");
         
@@ -49,13 +49,13 @@ window.onload = function(){
     });
         
     // cuando este focus el widget
-    $('.widget:not(.result)').unbind('focus').focus(function(e){
+    $('.widget:not(.result, .valid)').unbind('focus').focus(function(e){
         var element = $(this);
         element.addClass("edit");
     });
         
     // cuando pierda el foco el widget
-    $('.widget:not(.result)').unbind('blur').blur(function(e){
+    $('.widget:not(.result, .valid)').unbind('blur').blur(function(e){
         var element = $(this);
         element.removeClass("edit");
     });
@@ -188,6 +188,9 @@ window.onload = function(){
     // si ya existe un nombre
     if(localStorage.getItem('name') != null)
         $('#player_name').addClass('valid').val(localStorage.getItem('name')).next().addClass('active');
+  
+    // le doy un drag al cuadro de resultados
+    $('.container_results').draggable();
     
 };
 
@@ -456,7 +459,7 @@ function remove_numbers(){
                 position: i,
                 value: $e.val()
             };
-            $e.css('display', 'none');
+            $e.css('display', 'none'); // oculto el input para que no pueda ambiar al valor
             positions_widgets.push(obj);
         }
     });
