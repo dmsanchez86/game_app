@@ -4,21 +4,21 @@
 		text-align: center;
 
 		button{
-			background-color: #323232;
+			background-color: #1E7D22;
 			padding: .5rem 15.3%;
 			color: white;
-			border: solid thin #323232;
+			border: solid thin #1E7D22;
 			display: inline-block;
 			text-transform: uppercase;
 			position: relative;
 			font-size: 1.8rem;
-			@include box-shadow(0 5px #111);
+			@include box-shadow(0 5px #045806);
 			@include border-radius(2px);
 			overflow: hidden;
 
 			&:hover{
 				top: 2px;
-				@include box-shadow(0 3px #111);
+				@include box-shadow(0 3px #045806);
 				outline: none;
 			}
 
@@ -28,7 +28,7 @@
 
 			&:active{
 				top: 5px;
-				@include box-shadow(0 0px #111);
+				@include box-shadow(0 0px #045806);
 			}
 		}
 	}

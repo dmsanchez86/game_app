@@ -6,6 +6,26 @@ var r2 = $('.widget.result[result="r2"]');
 var r3 = $('.widget.result[result="r3"]');
 var r4 = $('.widget.result[result="r4"]');
 
+// variables para los operadores
+var operator1 = $('.operator[ope="1"]');
+var operator2 = $('.operator[ope="2"]');
+var operator3 = $('.operator[ope="3"]');
+var operator4 = $('.operator[ope="4"]');
+
+// Guardo todas las posiciones
+var a_1 = $('.widget[position="a1"]');
+var b_1 = $('.widget[position="b1"]');
+var c_1 = $('.widget[position="c1"]');
+var d_1 = $('.widget[position="d1"]');
+var a_2 = $('.widget[position="a2"]');
+var b_2 = $('.widget[position="b2"]');
+var c_2 = $('.widget[position="c2"]');
+var d_2 = $('.widget[position="d2"]');
+var a_3 = $('.widget[position="a3"]');
+var b_3 = $('.widget[position="b3"]');
+var a_4 = $('.widget[position="a4"]');
+var b_4 = $('.widget[position="b4"]');
+
 // variable que me controlara el tiempo del cronometro
 var time_interval = null; 
 
@@ -71,7 +91,8 @@ window.onload = function(){
     // Evento que me limpia todos los campos
     $('#btn_restart').unbind('click').click(function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
-        $('.operator').removeAttr('sum subtraction multiplication division');
+        // $('.operator').removeAttr('sum subtraction multiplication division');
+        restart_game();
         clearInterval(time_interval);
         time();
     });
@@ -84,7 +105,7 @@ window.onload = function(){
     // Evento que cambia el juego
     $('#btn_new').unbind('click').click(function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
-        $('.operator').removeAttr('sum subtraction multiplication division');
+        // $('.operator').removeAttr('sum subtraction multiplication division');
         new_game();
         clearInterval(time_interval);
         time();
@@ -144,80 +165,65 @@ function init(){
 
 // Funcion que carga los resultados
 function load_results(){
+    // funcion que carga los numeros aleatorios
+    numbers();
     
-    var data_results = {};
-    var number_results = 0;
+    // funcion que carga los operadores aleatoriamente
+    operators_load();
     
-    // ajax que me trae los resultados
-    $.ajax({
-        url: "js/results.json",
-        type: "POST",
-        data: null,
-        dataType: "json",
-        asyn: false,
-        success: function(response){
-            data_results = response.data;
-            
-            // Guardo la informacion en un local storage para no volver a hacer el llamdo ajax
-            localStorage.setItem('data_results', JSON.stringify(data_results));
-            
-            number_results = data_results.length - 1;
-            
-            // Número aleatorio entre el tamaño del array de los resultados
-            var randon_number = Math.round(Math.random() * number_results);
-            
-            // obtengo los resultados del array aleatoriamente
-            var results = data_results[randon_number];
-            
-            // Guardo el actual para validar cuando sea un nuevo juego
-            localStorage.setItem('current_results', JSON.stringify(results));
-            
-            r1.attr('data-value', results.first_result);
-            r2.attr('data-value', results.second_result);
-            r3.attr('data-value', results.third_result);
-            r4.attr('data-value', results.fourth_result);
-            
-        }
-    });
+    // funcion que suma los valores dados por los numeros aleatorios
+    sum_results();
+    
+    // funcion que remueve algunos numeros
+    remove_numbers();
 }
 
 // funcion que valida si el juego es correcto o incorrecto
 function validate_game(){
-    // Guardo todas las posiciones
-    
-    var a1 = parseInt($('.widget[position="a1"]').attr('data-value'));
-    var b1 = parseInt($('.widget[position="b1"]').attr('data-value'));
-    var c1 = parseInt($('.widget[position="c1"]').attr('data-value'));
-    var d1 = parseInt($('.widget[position="d1"]').attr('data-value'));
-    var a2 = parseInt($('.widget[position="a2"]').attr('data-value'));
-    var b2 = parseInt($('.widget[position="b2"]').attr('data-value'));
-    var c2 = parseInt($('.widget[position="c2"]').attr('data-value'));
-    var d2 = parseInt($('.widget[position="d2"]').attr('data-value'));
-    var a3 = parseInt($('.widget[position="a3"]').attr('data-value'));
-    var b3 = parseInt($('.widget[position="b3"]').attr('data-value'));
-    var a4 = parseInt($('.widget[position="a4"]').attr('data-value'));
-    var b4 = parseInt($('.widget[position="b4"]').attr('data-value'));
+    // obtengo todos los resultados de los cuadros
+    var a1 = parseInt(a_1.attr('data-value'));
+    var b1 = parseInt(b_1.attr('data-value'));
+    var c1 = parseInt(c_1.attr('data-value'));
+    var d1 = parseInt(d_1.attr('data-value'));
+    var a2 = parseInt(a_2.attr('data-value'));
+    var b2 = parseInt(b_2.attr('data-value'));
+    var c2 = parseInt(c_2.attr('data-value'));
+    var d2 = parseInt(d_2.attr('data-value'));
+    var a3 = parseInt(a_3.attr('data-value'));
+    var b3 = parseInt(b_3.attr('data-value'));
+    var a4 = parseInt(a_4.attr('data-value'));
+    var b4 = parseInt(b_4.attr('data-value'));
     
     // valida si inserto numeros en todos los campos
     if(isNaN(a1) || isNaN(a2) || isNaN(a3) || isNaN(a4) || isNaN(b1) || isNaN(b2) || isNaN(b3) || isNaN(b4) || isNaN(c1) || isNaN(c2) || isNaN(d1) || isNaN(d2)){
         alert('Ingrese todos los números');
     }else{
-        var result_1 = a1 + b1 + c1 + d1;
-        var result_2 = a2 + b2 + c2 + d2;
-        var result_3 = a1 + a2 + a3 + a4;
-        var result_4 = b1 + b2 + b3 + b4;
+        // hallo los operadores antes puestos
+        var operators = JSON.parse(localStorage.getItem('operators'));
+        
+        var op_1 = (operators.ope1 == "sum") ? "+" : "*";
+        var op_2 = (operators.ope2 == "sum") ? "+" : "*";
+        var op_3 = (operators.ope3 == "sum") ? "+" : "*";
+        var op_4 = (operators.ope4 == "sum") ? "+" : "*";
+        
+        // evaluo las operaciones
+        var result_1 = a1 +op_1+ b1 +op_1+ c1 +op_1+ d1;
+        var result_2 = a2 +op_2+ b2 +op_2+ c2 +op_2+ d2;
+        var result_3 = a1 +op_3+ a2 +op_3+ a3 +op_3+ a4;
+        var result_4 = b1 +op_4+ b2 +op_4+ b3 +op_4+ b4;
         
         var res1 = parseInt(r1.attr('data-value'));
         var res2 = parseInt(r2.attr('data-value'));
         var res3 = parseInt(r3.attr('data-value'));
         var res4 = parseInt(r4.attr('data-value'));
-        
-        if(result_1 == res1 && result_2 == res2 && result_3 == res3 && result_4 == res4 )
+
+        // si todos los resultados son correctos 
+        if(eval(result_1) == res1 && eval(result_2) == res2 && eval(result_3) == res3 && eval(result_4) == res4 )
             alert('¡GANASTE!');
         else
             alert('¡PERDISTE!');
             
-        btn_new.click();
+        // btn_new.click();
     }
     
 }
@@ -293,4 +299,157 @@ function time(){
         
         $('.container_results .time').text(string_time);
     },1000);
+}
+
+// funcion que me carga aleatoriamente los 12 numeros del tablero
+function numbers(){
+    // hallo los numeros aleatorios
+    var rand1 = Math.round(Math.random() * 9);
+    var rand2 = Math.round(Math.random() * 9);
+    var rand3 = Math.round(Math.random() * 9);
+    var rand4 = Math.round(Math.random() * 9);
+    var rand5 = Math.round(Math.random() * 9);
+    var rand6 = Math.round(Math.random() * 9);
+    var rand7 = Math.round(Math.random() * 9);
+    var rand8 = Math.round(Math.random() * 9);
+    var rand9 = Math.round(Math.random() * 9);
+    var rand10 = Math.round(Math.random() * 9);
+    var rand11 = Math.round(Math.random() * 9);
+    var rand12 = Math.round(Math.random() * 9);
+    
+    // imprimo los numeros en el dom
+    $('.widget[position="a1"]').addClass('valid').attr('data-value', rand1).find('.value_input').val(rand1);
+    $('.widget[position="b1"]').addClass('valid').attr('data-value', rand2).find('.value_input').val(rand2);
+    $('.widget[position="c1"]').addClass('valid').attr('data-value', rand3).find('.value_input').val(rand3);
+    $('.widget[position="d1"]').addClass('valid').attr('data-value', rand4).find('.value_input').val(rand4);
+    $('.widget[position="a2"]').addClass('valid').attr('data-value', rand5).find('.value_input').val(rand5);
+    $('.widget[position="b2"]').addClass('valid').attr('data-value', rand6).find('.value_input').val(rand6);
+    $('.widget[position="c2"]').addClass('valid').attr('data-value', rand7).find('.value_input').val(rand7);
+    $('.widget[position="d2"]').addClass('valid').attr('data-value', rand8).find('.value_input').val(rand8);
+    $('.widget[position="a3"]').addClass('valid').attr('data-value', rand9).find('.value_input').val(rand9);
+    $('.widget[position="b3"]').addClass('valid').attr('data-value', rand10).find('.value_input').val(rand10);
+    $('.widget[position="a4"]').addClass('valid').attr('data-value', rand11).find('.value_input').val(rand11);
+    $('.widget[position="b4"]').addClass('valid').attr('data-value', rand12).find('.value_input').val(rand12);
+}
+
+// funcion que carga aleatoriamente los operadores
+function operators_load(){
+    var operators = ["sum", "multiplication"];
+    
+    var ope1 = operators[Math.round(Math.random() * (operators.length - 1))];
+    var ope2 = operators[Math.round(Math.random() * (operators.length - 1))];
+    var ope3 = operators[Math.round(Math.random() * (operators.length - 1))];
+    var ope4 = operators[Math.round(Math.random() * (operators.length - 1))];
+    
+    // Guardo los operadores en un local storage
+    var operators = {
+        ope1,
+        ope2,
+        ope3,
+        ope4
+    };
+    
+    localStorage.setItem('operators', JSON.stringify(operators));
+    
+    operator1.attr(ope1,'');
+    operator2.attr(ope2,'');
+    operator3.attr(ope3,'');
+    operator4.attr(ope4,'');
+    
+}
+
+// funcion que calcula el resultado final para los 4 cajones
+function sum_results(){
+    var a1 = parseInt(a_1.attr('data-value'));
+    var b1 = parseInt(b_1.attr('data-value'));
+    var c1 = parseInt(c_1.attr('data-value'));
+    var d1 = parseInt(d_1.attr('data-value'));
+    var a2 = parseInt(a_2.attr('data-value'));
+    var b2 = parseInt(b_2.attr('data-value'));
+    var c2 = parseInt(c_2.attr('data-value'));
+    var d2 = parseInt(d_2.attr('data-value'));
+    var a3 = parseInt(a_3.attr('data-value'));
+    var b3 = parseInt(b_3.attr('data-value'));
+    var a4 = parseInt(a_4.attr('data-value'));
+    var b4 = parseInt(b_4.attr('data-value'));
+    
+    // hallo los operadores antes puestos
+    var operators = JSON.parse(localStorage.getItem('operators'));
+    
+    var op_1 = (operators.ope1 == "sum") ? "+" : "*";
+    var op_2 = (operators.ope2 == "sum") ? "+" : "*";
+    var op_3 = (operators.ope3 == "sum") ? "+" : "*";
+    var op_4 = (operators.ope4 == "sum") ? "+" : "*";
+    
+    var result_1 = a1 +op_1+ b1 +op_1+ c1 +op_1+ d1;
+    var result_2 = a2 +op_2+ b2 +op_2+ c2 +op_2+ d2;
+    var result_3 = a1 +op_3+ a2 +op_3+ a3 +op_3+ a4;
+    var result_4 = b1 +op_4+ b2 +op_4+ b3 +op_4+ b4;
+    
+    r1.attr('data-value', eval(result_1));
+    r2.attr('data-value', eval(result_2));
+    r3.attr('data-value', eval(result_3));
+    r4.attr('data-value', eval(result_4));
+    
+}
+
+// Funcion que quita algunos de los numeros
+function remove_numbers(){
+    // hallo 8 numeros aleatorios
+    var n1 = Math.round(Math.random() * 12);
+    var n2 = Math.round(Math.random() * 12);
+    var n3 = Math.round(Math.random() * 12);
+    var n4 = Math.round(Math.random() * 12);
+    var n5 = Math.round(Math.random() * 12);
+    var n6 = Math.round(Math.random() * 12);
+    var n7 = Math.round(Math.random() * 12);
+    var n8 = Math.round(Math.random() * 12);
+    var n9 = Math.round(Math.random() * 12);
+    var n10 = Math.round(Math.random() * 12);
+    var n11 = Math.round(Math.random() * 12);
+    var n12 = Math.round(Math.random() * 12);
+    
+    $('.widget:not(.result)').eq(n1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n2).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n7).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n9).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n10).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    $('.widget:not(.result)').eq(n12).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    
+    var positions_widgets = [];
+    
+    // recorro todos los widgets para inactivar los que ya tienen valor
+    $('.widget:not(.result) .value_input').each(function(i,e){
+        // debugger
+        var $e = $(e);
+        if(isNaN(parseInt($e.val()))){
+            // es por que n es un numero
+        }else{
+            // guardo los widgets que tienen algun valor
+            var obj = {
+                position: i,
+                value: $e.val()
+            };
+            $e.css('display', 'none');
+            positions_widgets.push(obj);
+        }
+    });
+    
+    localStorage.setItem('position_widgets', JSON.stringify(positions_widgets));
+    
+    console.log(positions_widgets);
+}
+
+// Funcion que resetea el juego
+function restart_game(){
+    var widgets_positions = JSON.parse(localStorage.getItem('position_widgets'));
+    
+    for(var i = 0; i < widgets_positions.length; i++)
+        $('.widget[position]').eq(widgets_positions[i].position).addClass('valid').attr('data-value', widgets_positions[i].value).find('.value_input').val(widgets_positions[i].value);
 }

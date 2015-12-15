@@ -17,7 +17,7 @@ body{
 
 body{
     font-size: 100%;
-    
+    @include gradient(radial, (center, #774111, #b47f44));
 }
 
 .main_app{
@@ -31,8 +31,9 @@ body{
 
 .content_widgets{
     max-width: 100%;
-    border: solid thin #aaa;
+    background: white;
     padding: .5rem;
+    @include border-radius(5px);
     @include perspective(1000px);
     @include perspective-origin(50% 40%);
     
@@ -216,6 +217,8 @@ body{
         
         &:after{
             background: #1E7D22;
+            font-size: 3rem;
+            line-height: 2;
         }
         
         &:before{
