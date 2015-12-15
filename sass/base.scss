@@ -396,3 +396,9 @@ body{
         }
     }
 }
+
+.container_audios,
+audio{
+    display: none;
+    overflow: hidden;
+}
