@@ -299,18 +299,18 @@ function numbers(){
     var rand12 = Math.round(Math.random() * 9);
     
     // imprimo los numeros en el dom
-    $('.widget[position="a1"]').addClass('valid').attr('data-value', rand1).find('.value_input').val(rand1);
-    $('.widget[position="b1"]').addClass('valid').attr('data-value', rand2).find('.value_input').val(rand2);
-    $('.widget[position="c1"]').addClass('valid').attr('data-value', rand3).find('.value_input').val(rand3);
-    $('.widget[position="d1"]').addClass('valid').attr('data-value', rand4).find('.value_input').val(rand4);
-    $('.widget[position="a2"]').addClass('valid').attr('data-value', rand5).find('.value_input').val(rand5);
-    $('.widget[position="b2"]').addClass('valid').attr('data-value', rand6).find('.value_input').val(rand6);
-    $('.widget[position="c2"]').addClass('valid').attr('data-value', rand7).find('.value_input').val(rand7);
-    $('.widget[position="d2"]').addClass('valid').attr('data-value', rand8).find('.value_input').val(rand8);
-    $('.widget[position="a3"]').addClass('valid').attr('data-value', rand9).find('.value_input').val(rand9);
-    $('.widget[position="b3"]').addClass('valid').attr('data-value', rand10).find('.value_input').val(rand10);
-    $('.widget[position="a4"]').addClass('valid').attr('data-value', rand11).find('.value_input').val(rand11);
-    $('.widget[position="b4"]').addClass('valid').attr('data-value', rand12).find('.value_input').val(rand12);
+    $('.widget[position="a1"]').addClass('valid').attr('data-value', (rand1 == 0) ? 1 : rand1).find('.value_input').val(rand1);
+    $('.widget[position="b1"]').addClass('valid').attr('data-value', (rand2 == 0) ? 1 : rand2).find('.value_input').val(rand2);
+    $('.widget[position="c1"]').addClass('valid').attr('data-value', (rand3 == 0) ? 1 : rand3).find('.value_input').val(rand3);
+    $('.widget[position="d1"]').addClass('valid').attr('data-value', (rand4 == 0) ? 1 : rand4).find('.value_input').val(rand4);
+    $('.widget[position="a2"]').addClass('valid').attr('data-value', (rand5 == 0) ? 1 : rand5).find('.value_input').val(rand5);
+    $('.widget[position="b2"]').addClass('valid').attr('data-value', (rand6 == 0) ? 1 : rand6).find('.value_input').val(rand6);
+    $('.widget[position="c2"]').addClass('valid').attr('data-value', (rand7 == 0) ? 1 : rand7).find('.value_input').val(rand7);
+    $('.widget[position="d2"]').addClass('valid').attr('data-value', (rand8 == 0) ? 1 : rand8).find('.value_input').val(rand8);
+    $('.widget[position="a3"]').addClass('valid').attr('data-value', (rand9 == 0) ? 1 : rand9).find('.value_input').val(rand9);
+    $('.widget[position="b3"]').addClass('valid').attr('data-value', (rand10 == 0) ? 1 : rand10).find('.value_input').val(rand10);
+    $('.widget[position="a4"]').addClass('valid').attr('data-value', (rand11 == 0) ? 1 : rand11).find('.value_input').val(rand11);
+    $('.widget[position="b4"]').addClass('valid').attr('data-value', (rand12 == 0) ? 1 : rand12).find('.value_input').val(rand12);
 }
 
 // funcion que carga aleatoriamente los operadores
