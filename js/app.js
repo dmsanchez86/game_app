@@ -92,8 +92,8 @@ window.onload = function(){
     $('#btn_restart').unbind('click').click(function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
         // $('.operator').removeAttr('sum subtraction multiplication division');
-        restart_game();
         clearInterval(time_interval);
+        restart_game();
         time();
     });
     
@@ -104,11 +104,10 @@ window.onload = function(){
     
     // Evento que cambia el juego
     $('#btn_new').unbind('click').click(function(){
-        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
+        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('').css('display', 'block');
         // $('.operator').removeAttr('sum subtraction multiplication division');
-        new_game();
         clearInterval(time_interval);
-        time();
+        new_game();
     });
     
     // evento de los operadores
@@ -131,6 +130,21 @@ window.onload = function(){
         $(this).parent().parent().removeAttr('sum subtraction multiplication division').attr(operator, '');
     });
     
+    // evento que cambia el nombre del usuario
+    $('.container_results .name').unbind('click').click(function(){
+        var name = prompt("Ingrese el nombre del jugador", $(this).text());
+        
+        if(name == "" || name == undefined){
+            return;
+        }else{
+            // cargo el nombre del usuario
+            $('.container_results .name').text(name);
+            
+            // Guardo el nombre en un local storage
+            localStorage.setItem('name', name);
+        }
+    });
+    
 };
 
 // Funcion que se llama al momento de que la página este cargada
@@ -138,13 +152,9 @@ function init(){
     // cargo un nombre si ya se ha seleccionado
     if(localStorage.getItem('name') != null){
         $('.container_results .name').text(localStorage.getItem('name'));
-        
-        // Funcion que me pone los resultados
-        load_results();
-        time();
     }else{
         // Pido el nombre al usuario
-        var name = prompt("Ingrese el nombre del jugador","player__001");
+        var name = prompt("Ingrese el nombre del jugador", "player__001");
         
         if(name == "" || name == undefined){
             location.reload();
@@ -154,13 +164,13 @@ function init(){
             $('.container_results .name').text(name);
             
             // Guardo el nombre en un local storage
-            localStorage.setItem('name', name)
-            
-            // Funcion que me pone los resultados
-            load_results();
-            time();
+            localStorage.setItem('name', name);
         }
     }
+    
+    // Funcion que me pone los resultados
+    load_results();
+    time();
 }
 
 // Funcion que carga los resultados
@@ -230,38 +240,9 @@ function validate_game(){
 
 // funcion que cambia el juego
 function new_game(){
-    // obtengo los resultados antes guardados
-    var data_results = JSON.parse(localStorage.getItem('data_results'));
-    
-    // Obtengo el resultado actual para validar que no se repita
-    var current_result = JSON.parse(localStorage.getItem('current_results'));
-    
-    // arreglo que quedara actualizado con los resultados sin el actual
-    var results = [];
-    
-    // recorro los resultados y guardo los que no sean iguales al actual
-    data_results.forEach(function(element,index){
-        if(element.first_result != current_result.first_result || element.second_result != current_result.second_result || element.third_result != current_result.third_result || element.fourth_result != current_result.fourth_result){
-            results.push(element);
-        }
-    });
-    
-    var number_results = results.length - 1;
-            
-    // Número aleatorio entre el tamaño del array de los resultados
-    var randon_number = Math.round(Math.random() * number_results);
-    
-    // obtengo los resultados del array aleatoriamente
-    var new_result = results[randon_number];
-    
-    // Guardo el actual para validar cuando sea un nuevo juego
-    localStorage.setItem('current_results', JSON.stringify(new_result));
-    
-    r1.attr('data-value', new_result.first_result);
-    r2.attr('data-value', new_result.second_result);
-    r3.attr('data-value', new_result.third_result);
-    r4.attr('data-value', new_result.fourth_result);
-    
+    // Funcion que me pone los resultados
+    load_results();
+    time();
 }
 
 // funcion que hace correr el tiempo
@@ -351,10 +332,10 @@ function operators_load(){
     
     localStorage.setItem('operators', JSON.stringify(operators));
     
-    operator1.attr(ope1,'');
-    operator2.attr(ope2,'');
-    operator3.attr(ope3,'');
-    operator4.attr(ope4,'');
+    operator1.removeAttr('sum multiplication division subtraction').attr(ope1,'');
+    operator2.removeAttr('sum multiplication division subtraction').attr(ope2,'');
+    operator3.removeAttr('sum multiplication division subtraction').attr(ope3,'');
+    operator4.removeAttr('sum multiplication division subtraction').attr(ope4,'');
     
 }
 
@@ -426,7 +407,7 @@ function remove_numbers(){
     
     // recorro todos los widgets para inactivar los que ya tienen valor
     $('.widget:not(.result) .value_input').each(function(i,e){
-        // debugger
+        
         var $e = $(e);
         if(isNaN(parseInt($e.val()))){
             // es por que n es un numero
@@ -442,8 +423,6 @@ function remove_numbers(){
     });
     
     localStorage.setItem('position_widgets', JSON.stringify(positions_widgets));
-    
-    console.log(positions_widgets);
 }
 
 // Funcion que resetea el juego
