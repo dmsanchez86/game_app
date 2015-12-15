@@ -11,12 +11,16 @@ body {
 
 body {
   font-size: 100%;
+  overflow: hidden;
   background-image: -webkit-radial-gradient(center, #774111, #b47f44);
   background-image: -khtml-radial-gradient(center, #774111, #b47f44);
   background-image: -moz-radial-gradient(center, #774111, #b47f44);
   background-image: -ms-radial-gradient(center, #774111, #b47f44);
   background-image: -o-radial-gradient(center, #774111, #b47f44);
   background-image: radial-gradient(center, #774111, #b47f44); }
+
+label {
+  cursor: pointer !important; }
 
 .main_app {
   height: 100vh;
@@ -36,12 +40,37 @@ body {
   -moz-justify-content: center;
   -ms-justify-content: center;
   -o-justify-content: center;
-  justify-content: center; }
+  justify-content: center;
+  -webkit-perspective: 500px;
+  -khtml-perspective: 500px;
+  -moz-perspective: 500px;
+  -ms-perspective: 500px;
+  -o-perspective: 500px;
+  perspective: 500px;
+  -webkit-perspective-origin: center;
+  -khtml-perspective-origin: center;
+  -moz-perspective-origin: center;
+  -ms-perspective-origin: center;
+  -o-perspective-origin: center;
+  perspective-origin: center; }
 
 .content_widgets {
   max-width: 100%;
   background: white;
   padding: .5rem;
+  backface-visibility: hidden;
+  -webkit-transform: rotatey(180deg);
+  -khtml-transform: rotatey(180deg);
+  -moz-transform: rotatey(180deg);
+  -ms-transform: rotatey(180deg);
+  -o-transform: rotatey(180deg);
+  transform: rotatey(180deg);
+  -webkit-transition: transform 1s ease;
+  -khtml-transition: transform 1s ease;
+  -moz-transition: transform 1s ease;
+  -ms-transition: transform 1s ease;
+  -o-transition: transform 1s ease;
+  transition: transform 1s ease;
   -webkit-border-radius: 5px;
   -khtml-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -60,6 +89,13 @@ body {
   -ms-perspective-origin: 50% 40%;
   -o-perspective-origin: 50% 40%;
   perspective-origin: 50% 40%; }
+  .content_widgets.play {
+    -webkit-transform: rotatey(0deg);
+    -khtml-transform: rotatey(0deg);
+    -moz-transform: rotatey(0deg);
+    -ms-transform: rotatey(0deg);
+    -o-transform: rotatey(0deg);
+    transform: rotatey(0deg); }
   .content_widgets .row_widgets {
     display: -webkit-flex;
     display: -moz-flex;
@@ -184,42 +220,52 @@ body {
           -ms-box-shadow: 0 0px #b47f44;
           -o-box-shadow: 0 0px #b47f44;
           box-shadow: 0 0px #b47f44; }
-  .content_widgets .container_results {
+
+.container_results {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  opacity: 0;
+  -webkit-transition: all 1s ease-in-out;
+  -khtml-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out; }
+  .container_results.play {
+    opacity: 1; }
+  .container_results img {
+    max-width: 270px; }
+  .container_results > span {
+    min-width: 90px;
     position: absolute;
-    bottom: 150px;
-    right: 4rem; }
-    .content_widgets .container_results img {
-      max-width: 270px; }
-    .content_widgets .container_results > span {
-      min-width: 90px;
-      position: absolute;
-      top: 0;
-      color: white;
-      font-weight: bold;
-      font-family: 'Roboto';
-      font-size: 1.2rem; }
-    .content_widgets .container_results .name {
-      margin: auto;
-      top: 5px;
-      left: 0;
-      right: 0;
-      text-align: center; }
-    .content_widgets .container_results .time {
-      right: 0;
-      left: 54px;
-      margin: auto;
-      top: -36px;
-      bottom: 0;
-      height: 25px;
-      width: 90px; }
-    .content_widgets .container_results .points {
-      right: 0;
-      left: 54px;
-      margin: auto;
-      top: 40px;
-      bottom: 0;
-      height: 25px;
-      width: 90px; }
+    top: 0;
+    color: white;
+    font-weight: bold;
+    font-family: 'Roboto';
+    font-size: 1.2rem; }
+  .container_results .name {
+    margin: auto;
+    top: 5px;
+    left: 0;
+    right: 0;
+    text-align: center; }
+  .container_results .time {
+    right: 0;
+    left: 54px;
+    margin: auto;
+    top: -36px;
+    bottom: 0;
+    height: 25px;
+    width: 90px; }
+  .container_results .points {
+    right: 0;
+    left: 54px;
+    margin: auto;
+    top: 40px;
+    bottom: 0;
+    height: 25px;
+    width: 90px; }
 
 .widget {
   max-width: 90px;
@@ -466,5 +512,141 @@ body {
       background-position: -180px 0; }
     .operator.vertical[division] {
       background-position: -270px 0; }
+
+.container_audios,
+audio {
+  display: none;
+  overflow: hidden; }
+
+.main_panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -o-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  -webkit-transition: all 0.5s ease-in-out;
+  -khtml-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
+  .main_panel .content {
+    max-width: 300px;
+    background: white;
+    padding: 2rem;
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px; }
+  .main_panel .container_btn {
+    position: relative;
+    text-align: center; }
+    .main_panel .container_btn button {
+      background-color: #1E7D22;
+      padding: .5rem 15.3%;
+      color: white;
+      border: solid thin #1E7D22;
+      display: inline-block;
+      text-transform: uppercase;
+      position: relative;
+      font-size: 1.8rem;
+      -webkit-box-shadow: 0 5px #045806;
+      -khtml-box-shadow: 0 5px #045806;
+      -moz-box-shadow: 0 5px #045806;
+      -ms-box-shadow: 0 5px #045806;
+      -o-box-shadow: 0 5px #045806;
+      box-shadow: 0 5px #045806;
+      -webkit-border-radius: 2px;
+      -khtml-border-radius: 2px;
+      -moz-border-radius: 2px;
+      -ms-border-radius: 2px;
+      -o-border-radius: 2px;
+      border-radius: 2px;
+      overflow: hidden; }
+      .main_panel .container_btn button:hover {
+        top: 2px;
+        -webkit-box-shadow: 0 3px #045806;
+        -khtml-box-shadow: 0 3px #045806;
+        -moz-box-shadow: 0 3px #045806;
+        -ms-box-shadow: 0 3px #045806;
+        -o-box-shadow: 0 3px #045806;
+        box-shadow: 0 3px #045806;
+        outline: none; }
+      .main_panel .container_btn button:focus {
+        outline: none; }
+      .main_panel .container_btn button:active {
+        top: 5px;
+        -webkit-box-shadow: 0 0px #045806;
+        -khtml-box-shadow: 0 0px #045806;
+        -moz-box-shadow: 0 0px #045806;
+        -ms-box-shadow: 0 0px #045806;
+        -o-box-shadow: 0 0px #045806;
+        box-shadow: 0 0px #045806; }
+  .main_panel .container_btn button {
+    background: #774111;
+    border-color: #774111;
+    font-size: 1.4rem;
+    width: 100%;
+    -webkit-box-shadow: 0 5px #b47f44;
+    -khtml-box-shadow: 0 5px #b47f44;
+    -moz-box-shadow: 0 5px #b47f44;
+    -ms-box-shadow: 0 5px #b47f44;
+    -o-box-shadow: 0 5px #b47f44;
+    box-shadow: 0 5px #b47f44; }
+    .main_panel .container_btn button:hover {
+      top: 2px;
+      -webkit-box-shadow: 0 3px #b47f44;
+      -khtml-box-shadow: 0 3px #b47f44;
+      -moz-box-shadow: 0 3px #b47f44;
+      -ms-box-shadow: 0 3px #b47f44;
+      -o-box-shadow: 0 3px #b47f44;
+      box-shadow: 0 3px #b47f44;
+      outline: none; }
+    .main_panel .container_btn button:focus {
+      outline: none; }
+    .main_panel .container_btn button:active {
+      top: 5px;
+      -webkit-box-shadow: 0 0px #b47f44;
+      -khtml-box-shadow: 0 0px #b47f44;
+      -moz-box-shadow: 0 0px #b47f44;
+      -ms-box-shadow: 0 0px #b47f44;
+      -o-box-shadow: 0 0px #b47f44;
+      box-shadow: 0 0px #b47f44; }
+  .main_panel .input-field label {
+    left: 3rem; }
+    .main_panel .input-field label.active {
+      -webkit-transform: translateY(-140%) translateX(6px);
+      -khtml-transform: translateY(-140%) translateX(6px);
+      -moz-transform: translateY(-140%) translateX(6px);
+      -ms-transform: translateY(-140%) translateX(6px);
+      -o-transform: translateY(-140%) translateX(6px);
+      transform: translateY(-140%) translateX(6px); }
+  .main_panel .input-field input {
+    text-align: center; }
+
+input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #9E6831;
+  box-shadow: 0 1px 0 0 #8E5824; }
+
+input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label, input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label, input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label, input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+  color: #925C27; }
 
 /*# sourceMappingURL=main.css.map */

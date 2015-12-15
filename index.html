@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        
         <title>Game App</title>
         
         <!-- StyleSheets Libraries -->
@@ -140,18 +141,33 @@
                     <button type="button" id="btn_restart" class="restart">Reiniciar</button>
                     <button type="button" id="btn_validate">Validar</button>
                 </div>
-                <div class="container_results">
-                    <img src="images/board.png"></img>
-                    <span class="name"></span>
-                    <span class="time"></span>
-                    <span class="points">0</span>
+            </div>
+        </div>
+        
+        <!-- Div de los resultados -->
+        <div class="container_results">
+            <img src="images/board.png"></img>
+            <span class="name"></span>
+            <span class="time"></span>
+            <span class="points">0</span>
+        </div>
+        
+        <!-- Div donde se ingresa el nombre -->
+        <div class="main_panel">
+            <div class="content">
+                <div class="input-field col s6">
+                  <input id="player_name" type="text" class="validate">
+                  <label for="player_name">Nombre Jugador</label>
+                </div>
+                <div class="container_btn">
+                    <button type="button" id="btn_start">Comenzar</button>
                 </div>
             </div>
         </div>
         
         <!-- Container Audios-->
-        <div class="container_audios">
-            <audio controls id="audio_background">
+        <div class="container_audios" style="display:none">
+            <audio controls loop id="audio_background">
               <source src="audios/background.wav" type="audio/wav">
             </audio>
             <audio controls id="audio_incorrect">

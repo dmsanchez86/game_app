@@ -31,9 +31,6 @@ var time_interval = null;
 
 // Carga de la página
 window.onload = function(){
-    
-    // Inicio del Juego
-    init();
         
     // hover del widget que pone el foco en el input
     $('.widget:not(.result)').unbind('mouseenter').mouseenter(function(e){
@@ -95,6 +92,7 @@ window.onload = function(){
         clearInterval(time_interval);
         restart_game();
         time();
+        audio_start.play();
     });
     
     // Evento que valida el juego
@@ -108,6 +106,8 @@ window.onload = function(){
         // $('.operator').removeAttr('sum subtraction multiplication division');
         clearInterval(time_interval);
         new_game();
+        audio_start.play();
+        audio_background.play();
     });
     
     // evento de los operadores
@@ -145,28 +145,56 @@ window.onload = function(){
         }
     });
     
-};
-
-// Funcion que se llama al momento de que la página este cargada
-function init(){
-    // cargo un nombre si ya se ha seleccionado
-    if(localStorage.getItem('name') != null){
-        $('.container_results .name').text(localStorage.getItem('name'));
-    }else{
-        // Pido el nombre al usuario
-        var name = prompt("Ingrese el nombre del jugador", "player__001");
+    // evento del inicio
+    $('#btn_start').unbind('click').click(function(){
+        var name = $('#player_name').val();
         
-        if(name == "" || name == undefined){
-            location.reload();
+        if(name == ""){
             return;
         }else{
+            
             // cargo el nombre del usuario
             $('.container_results .name').text(name);
             
             // Guardo el nombre en un local storage
             localStorage.setItem('name', name);
+            
+            // oculto el panel principal
+            $('.main_panel').css({
+                '-webkit-transform':'scale(0) rotatez(360deg)',
+                '-moz-transform':'scale(0) rotatez(360deg)',
+                '-ms-transform':'scale(0) rotatez(360deg)',
+                '-o-transform':'scale(0) rotatez(360deg)',
+                'transform':'scale(0) rotatez(360deg)'
+            });
+            
+            // muestro el panel del juego
+            setTimeout(function(){
+                $('.content_widgets').addClass('play');
+                $('.container_results').addClass('play');
+            }, 800);
+            
+            // inicio el juego
+            setTimeout(function(){
+                // sonido de comenzar el juego
+                audio_start.play();
+                
+                // Inicio del Juego
+                init();
+            }, 1300);
         }
-    }
+    });
+    
+    // si ya existe un nombre
+    if(localStorage.getItem('name') != null)
+        $('#player_name').addClass('valid').val(localStorage.getItem('name')).next().addClass('active');
+    
+};
+
+// Funcion que se llama al momento de que la página este cargada
+function init(){
+    
+    audio_background.play();
     
     // Funcion que me pone los resultados
     load_results();
@@ -206,6 +234,7 @@ function validate_game(){
     
     // valida si inserto numeros en todos los campos
     if(isNaN(a1) || isNaN(a2) || isNaN(a3) || isNaN(a4) || isNaN(b1) || isNaN(b2) || isNaN(b3) || isNaN(b4) || isNaN(c1) || isNaN(c2) || isNaN(d1) || isNaN(d2)){
+        audio_incorrect.play();
         alert('Ingrese todos los números');
     }else{
         // hallo los operadores antes puestos
@@ -228,12 +257,18 @@ function validate_game(){
         var res4 = parseInt(r4.attr('data-value'));
 
         // si todos los resultados son correctos 
-        if(eval(result_1) == res1 && eval(result_2) == res2 && eval(result_3) == res3 && eval(result_4) == res4 )
+        if(eval(result_1) == res1 && eval(result_2) == res2 && eval(result_3) == res3 && eval(result_4) == res4 ){
+            audio_background.pause();
+            audio_win.play();
             alert('¡GANASTE!');
-        else
+        }else{
+            audio_background.pause();
+            audio_incorrect.play();
             alert('¡PERDISTE!');
-            
-        // btn_new.click();
+        }
+        
+        // Inicio un nuevo juego
+        btn_new.click();
     }
     
 }
@@ -258,7 +293,11 @@ function time(){
             minutes--;
             
             if(minutes < 0){
-                minutes = 0;
+                audio_background.pause();
+                alert('el juego ha terminado!');
+                clearInterval(time_interval);
+                audio_incorrect.play();
+                btn_new.click();
             }
             seconds = 59;
         }
