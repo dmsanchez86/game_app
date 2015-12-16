@@ -436,7 +436,7 @@ audio{
     @include transition(all .5s ease-in-out);
     
     .content{
-        max-width: 300px;
+        max-width: 310px;
         background: white;
         padding: 2rem;
         @include border-radius(5px);
@@ -471,10 +471,9 @@ audio{
     
     .input-field {
         label{
-            left: 3rem;
             
             &.active{
-                @include transform(translateY(-140%) translateX(6px));
+                @include transform(translateY(-140%));
             }
         }
         
@@ -491,4 +490,37 @@ input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly
 
 input[type=text]:focus:not([readonly])+label, input[type=password]:focus:not([readonly])+label, input[type=email]:focus:not([readonly])+label, input[type=url]:focus:not([readonly])+label, input[type=time]:focus:not([readonly])+label, input[type=date]:focus:not([readonly])+label, input[type=datetime-local]:focus:not([readonly])+label, input[type=tel]:focus:not([readonly])+label, input[type=number]:focus:not([readonly])+label, input[type=search]:focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label{
     color: #925C27;
+}
+
+.dropdown-content li>a, .dropdown-content li>span{
+    color: #935E29;
+}
+
+.content_difficulty{
+    padding: 0 1rem 1rem;
+    
+    > img{
+        cursor: pointer;
+        margin-bottom: .25rem;
+        opacity: .5;
+        @include transition(all .15s ease);
+        @include border-radius(30px);
+        @include transform-origin(center);
+        @include transform(scalex(.9));
+        
+        &.active,
+        &:focus,
+        &:hover{
+            opacity: 1;
+            @include transform(scalex(1));
+        }
+        
+        &.active{
+            @include box-shadow(0 0 3px #323232);
+        }
+    }
+}
+
+.dropdown-content{
+    max-height: 320px;
 }

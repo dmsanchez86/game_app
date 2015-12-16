@@ -34,39 +34,31 @@ window.onload = function(){
         
     // hover del widget que pone el foco en el input
     $('.widget:not(.result, .valid)').unbind('mouseenter').mouseenter(function(e){
-        var element = $(this);
-        element.addClass("edit");
-        
-        element.find('.value_input').focus();
+        $(this).addClass("edit").find('.value_input').focus();
     });
     
     // cuando sale del hover
     $('.widget:not(.result, .valid)').unbind('mouseleave').mouseleave(function(e){
-        var element = $(this);
-        element.removeClass("edit");
-        
-        element.find('.value_input').blur();
+        $(this).removeClass("edit").find('.value_input').blur();
     });
         
     // cuando este focus el widget
     $('.widget:not(.result, .valid)').unbind('focus').focus(function(e){
-        var element = $(this);
-        element.addClass("edit");
+        $(this).addClass("edit").find('.value_input').focus();
     });
         
     // cuando pierda el foco el widget
     $('.widget:not(.result, .valid)').unbind('blur').blur(function(e){
-        var element = $(this);
-        element.removeClass("edit");
+        $(this).removeClass("edit").find('.value_input').blur();
     });
     
     // Evento cuando los input de los widgets obtinene el foco
-    $('.value_input').unbind('focus').focus(function(){
+    $('.widget:not(.result, .valid) .value_input').unbind('focus').focus(function(){
         $(this).parent().parent().addClass('edit').removeClass('valid');
     });
     
     // Evento cuando los input de los widgets pierden el foco
-    $('.value_input').unbind('blur').blur(function(){
+    $('.widget:not(.result, .valid) .value_input').unbind('blur').blur(function(){
         
         var value = $(this).val();
         
@@ -148,16 +140,24 @@ window.onload = function(){
     // evento del inicio
     $('#btn_start').unbind('click').click(function(){
         var name = $('#player_name').val();
+        var country = $('#player_country').val();
+        var email = $('#player_email').val();
         
-        if(name == ""){
+        if(name == "" || country == "" || email == ""){
             return;
         }else{
+            // Guardo los datos del usuario
+            var data_user = {
+                'name': name,
+                'country': country,
+                'email': email
+            };
             
             // cargo el nombre del usuario
             $('.container_results .name').text(name);
             
             // Guardo el nombre en un local storage
-            localStorage.setItem('name', name);
+            localStorage.setItem('data_user', JSON.stringify(data_user));
             
             // oculto el panel principal
             $('.main_panel').css({
@@ -185,12 +185,25 @@ window.onload = function(){
         }
     });
     
-    // si ya existe un nombre
-    if(localStorage.getItem('name') != null)
-        $('#player_name').addClass('valid').val(localStorage.getItem('name')).next().addClass('active');
-  
+    // evento de las imagenes de la dificultad
+    $('.content_difficulty > img').unbind('click').click(function(){
+        $('.content_difficulty > img').removeClass('active');
+        $(this).addClass('active');
+    });
+    
+    // si ya existen datos
+    if(localStorage.getItem('data_user') != null){
+        var data = JSON.parse(localStorage.getItem('data_user'));
+        $('#player_name').addClass('valid').val(data.name).next().addClass('active');
+        $('#player_country').val(data.country);
+        $('#player_email').addClass('valid').val(data.email).next().addClass('active');
+    }
+    
     // le doy un drag al cuadro de resultados
     $('.container_results').draggable();
+    
+    // ejecuto el metodo de materialize para los selects
+    $('select').material_select();
     
 };
 
@@ -297,9 +310,9 @@ function time(){
             
             if(minutes < 0){
                 audio_background.pause();
-                alert('el juego ha terminado!');
                 clearInterval(time_interval);
                 audio_incorrect.play();
+                alert('el juego ha terminado!');
                 btn_new.click();
             }
             seconds = 59;
@@ -457,12 +470,14 @@ function remove_numbers(){
             // guardo los widgets que tienen algun valor
             var obj = {
                 position: i,
-                value: $e.val()
+                value: (parseInt($e.val()) == 0) ? 1 : $e.val()
             };
-            $e.css('display', 'none'); // oculto el input para que no pueda ambiar al valor
+            $e.css('display', 'none'); // oculto el input para que no pueda cambiar al valor
             positions_widgets.push(obj);
         }
     });
+    
+    console.log(JSON.stringify(positions_widgets));
     
     localStorage.setItem('position_widgets', JSON.stringify(positions_widgets));
 }
