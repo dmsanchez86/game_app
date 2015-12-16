@@ -5,12 +5,20 @@ var r1 = $('.widget.result[result="r1"]');
 var r2 = $('.widget.result[result="r2"]');
 var r3 = $('.widget.result[result="r3"]');
 var r4 = $('.widget.result[result="r4"]');
+var r5 = $('.widget.result[result="r5"]');
+var r6 = $('.widget.result[result="r6"]');
+var r7 = $('.widget.result[result="r7"]');
+var r8 = $('.widget.result[result="r8"]');
 
 // variables para los operadores
 var operator1 = $('.operator[ope="1"]');
 var operator2 = $('.operator[ope="2"]');
 var operator3 = $('.operator[ope="3"]');
 var operator4 = $('.operator[ope="4"]');
+var operator5 = $('.operator[ope="5"]');
+var operator6 = $('.operator[ope="6"]');
+var operator7 = $('.operator[ope="7"]');
+var operator8 = $('.operator[ope="8"]');
 
 // Guardo todas las posiciones
 var a_1 = $('.widget[position="a1"]');
@@ -369,32 +377,48 @@ function numbers(){
 
 // funcion que carga aleatoriamente los operadores
 function operators_load(){
-    var operators = ["sum", "multiplication"];
+    var operators = [["sum", "subtraction"],["multiplication", "division"]];
     
-    var ope1 = operators[Math.round(Math.random() * (operators.length - 1))];
-    var ope2 = operators[Math.round(Math.random() * (operators.length - 1))];
-    var ope3 = operators[Math.round(Math.random() * (operators.length - 1))];
-    var ope4 = operators[Math.round(Math.random() * (operators.length - 1))];
+    // hallo aleatoriamente los operadores
+    var ope1 = operators[0][Math.round(Math.random() * (operators[0].length - 1))];
+    var ope2 = operators[0][Math.round(Math.random() * (operators[0].length - 1))];
+    var ope3 = operators[0][Math.round(Math.random() * (operators[0].length - 1))];
+    var ope4 = operators[0][Math.round(Math.random() * (operators[0].length - 1))];
+    var ope5 = operators[1][Math.round(Math.random() * (operators[1].length - 1))];
+    var ope6 = operators[1][Math.round(Math.random() * (operators[1].length - 1))];
+    var ope7 = operators[1][Math.round(Math.random() * (operators[1].length - 1))];
+    var ope8 = operators[1][Math.round(Math.random() * (operators[1].length - 1))];
     
     // Guardo los operadores en un local storage
-    var operators = {
+    var operators = [{
         ope1,
         ope2,
         ope3,
         ope4
-    };
+    },{
+        ope5,
+        ope6,
+        ope7,
+        ope8
+    }];
     
     localStorage.setItem('operators', JSON.stringify(operators));
     
+    // pongo los operadores
     operator1.removeAttr('sum multiplication division subtraction').attr(ope1,'');
     operator2.removeAttr('sum multiplication division subtraction').attr(ope2,'');
     operator3.removeAttr('sum multiplication division subtraction').attr(ope3,'');
     operator4.removeAttr('sum multiplication division subtraction').attr(ope4,'');
+    operator5.removeAttr('sum multiplication division subtraction').attr(ope5,'');
+    operator6.removeAttr('sum multiplication division subtraction').attr(ope6,'');
+    operator7.removeAttr('sum multiplication division subtraction').attr(ope7,'');
+    operator8.removeAttr('sum multiplication division subtraction').attr(ope8,'');
     
 }
 
-// funcion que calcula el resultado final para los 4 cajones
+// funcion que calcula el resultado final para los 8 cajones de los resultados
 function sum_results(){
+    // variables
     var a1 = parseInt(a_1.attr('data-value'));
     var b1 = parseInt(b_1.attr('data-value'));
     var c1 = parseInt(c_1.attr('data-value'));
@@ -411,20 +435,35 @@ function sum_results(){
     // hallo los operadores antes puestos
     var operators = JSON.parse(localStorage.getItem('operators'));
     
-    var op_1 = (operators.ope1 == "sum") ? "+" : "*";
-    var op_2 = (operators.ope2 == "sum") ? "+" : "*";
-    var op_3 = (operators.ope3 == "sum") ? "+" : "*";
-    var op_4 = (operators.ope4 == "sum") ? "+" : "*";
+    // los cambios por sus operadores respectivos
+    var op_1 = (operators[0].ope1 == "sum") ? "+" : "-";
+    var op_2 = (operators[0].ope2 == "sum") ? "+" : "-";
+    var op_3 = (operators[0].ope3 == "sum") ? "+" : "-";
+    var op_4 = (operators[0].ope4 == "sum") ? "+" : "-";
+    var op_5 = (operators[1].ope5 == "multiplication") ? "*" : "/";
+    var op_6 = (operators[1].ope6 == "multiplication") ? "*" : "/";
+    var op_7 = (operators[1].ope7 == "multiplication") ? "*" : "/";
+    var op_8 = (operators[1].ope8 == "multiplication") ? "*" : "/";
     
+    // calculo los resultados a evaluar
     var result_1 = a1 +op_1+ b1 +op_1+ c1 +op_1+ d1;
     var result_2 = a2 +op_2+ b2 +op_2+ c2 +op_2+ d2;
     var result_3 = a1 +op_3+ a2 +op_3+ a3 +op_3+ a4;
     var result_4 = b1 +op_4+ b2 +op_4+ b3 +op_4+ b4;
+    var result_5 = a3 +op_5+ b3;
+    var result_6 = a4 +op_6+ b4;
+    var result_7 = c1 +op_7+ c2;
+    var result_8 = d1 +op_8+ d2;
     
-    r1.attr('data-value', eval(result_1));
-    r2.attr('data-value', eval(result_2));
-    r3.attr('data-value', eval(result_3));
-    r4.attr('data-value', eval(result_4));
+    // imprimo los resultados con eval() y toFixed() para limitar los decimales cuando es division
+    r1.attr('data-value', eval(result_1).toFixed(1));
+    r2.attr('data-value', eval(result_2).toFixed(1));
+    r3.attr('data-value', eval(result_3).toFixed(1));
+    r4.attr('data-value', eval(result_4).toFixed(1));
+    r5.attr('data-value', eval(result_5).toFixed(1));
+    r6.attr('data-value', eval(result_6).toFixed(1));
+    r7.attr('data-value', eval(result_7).toFixed(1));
+    r8.attr('data-value', eval(result_8).toFixed(1));
     
 }
 
@@ -444,18 +483,18 @@ function remove_numbers(){
     var n11 = Math.round(Math.random() * 12);
     var n12 = Math.round(Math.random() * 12);
     
-    $('.widget:not(.result)').eq(n1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n2).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n7).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n9).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n10).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    $('.widget:not(.result)').eq(n12).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n2).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n7).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n9).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n10).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    // $('.widget:not(.result)').eq(n12).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     
     var positions_widgets = [];
     
