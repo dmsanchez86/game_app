@@ -263,10 +263,14 @@ function validate_game(){
         // hallo los operadores antes puestos
         var operators = JSON.parse(localStorage.getItem('operators'));
         
-        var op_1 = (operators.ope1 == "sum") ? "+" : "*";
-        var op_2 = (operators.ope2 == "sum") ? "+" : "*";
-        var op_3 = (operators.ope3 == "sum") ? "+" : "*";
-        var op_4 = (operators.ope4 == "sum") ? "+" : "*";
+        var op_1 = (operators[0].ope1 == "sum") ? "+" : "-";
+        var op_2 = (operators[0].ope2 == "sum") ? "+" : "-";
+        var op_3 = (operators[0].ope3 == "sum") ? "+" : "-";
+        var op_4 = (operators[0].ope4 == "sum") ? "+" : "-";
+        var op_5 = (operators[1].ope5 == "multiplication") ? "*" : "/";
+        var op_6 = (operators[1].ope6 == "multiplication") ? "*" : "/";
+        var op_7 = (operators[1].ope7 == "multiplication") ? "*" : "/";
+        var op_8 = (operators[1].ope8 == "multiplication") ? "*" : "/";
         
         // evaluo las operaciones
         var result_1 = a1 +op_1+ b1 +op_1+ c1 +op_1+ d1;
@@ -274,13 +278,32 @@ function validate_game(){
         var result_3 = a1 +op_3+ a2 +op_3+ a3 +op_3+ a4;
         var result_4 = b1 +op_4+ b2 +op_4+ b3 +op_4+ b4;
         
-        var res1 = parseInt(r1.attr('data-value'));
-        var res2 = parseInt(r2.attr('data-value'));
-        var res3 = parseInt(r3.attr('data-value'));
-        var res4 = parseInt(r4.attr('data-value'));
+        var result_5 = a3 +op_5+ b3;
+        var result_6 = a4 +op_6+ b4;
+        var result_7 = c1 +op_7+ c2;
+        var result_8 = d1 +op_8+ d2;
+        
+        var res1 = parseFloat(r1.attr('data-value'));
+        var res2 = parseFloat(r2.attr('data-value'));
+        var res3 = parseFloat(r3.attr('data-value'));
+        var res4 = parseFloat(r4.attr('data-value'));
+        var res5 = parseFloat(r5.attr('data-value'));
+        var res6 = parseFloat(r6.attr('data-value'));
+        var res7 = parseFloat(r7.attr('data-value'));
+        var res8 = parseFloat(r8.attr('data-value'));
+        
+        // hallo los resultados finales con su respectiva evaluacion
+        var final_r1 = (!isNaN(eval(result_1)) && eval(result_1).toString().indexOf('.') != -1) ? eval(result_1).toFixed(1) : eval(result_1);
+        var final_r2 = (!isNaN(eval(result_2)) && eval(result_2).toString().indexOf('.') != -1) ? eval(result_2).toFixed(1) : eval(result_2);
+        var final_r3 = (!isNaN(eval(result_3)) && eval(result_3).toString().indexOf('.') != -1) ? eval(result_3).toFixed(1) : eval(result_3);
+        var final_r4 = (!isNaN(eval(result_4)) && eval(result_4).toString().indexOf('.') != -1) ? eval(result_4).toFixed(1) : eval(result_4);
+        var final_r5 = (!isNaN(eval(result_5)) && eval(result_5).toString().indexOf('.') != -1) ? eval(result_5).toFixed(1) : eval(result_5);
+        var final_r6 = (!isNaN(eval(result_6)) && eval(result_6).toString().indexOf('.') != -1) ? eval(result_6).toFixed(1) : eval(result_6);
+        var final_r7 = (!isNaN(eval(result_7)) && eval(result_7).toString().indexOf('.') != -1) ? eval(result_7).toFixed(1) : eval(result_7);
+        var final_r8 = (!isNaN(eval(result_8)) && eval(result_8).toString().indexOf('.') != -1) ? eval(result_8).toFixed(1) : eval(result_8);
 
         // si todos los resultados son correctos 
-        if(eval(result_1) == res1 && eval(result_2) == res2 && eval(result_3) == res3 && eval(result_4) == res4 ){
+        if(final_r1 == res1 && final_r2 == res2 && final_r3 == res3 && final_r4 == res4  && final_r5 == res5 && final_r6 == res6 && final_r7 == res7 && final_r8 == res8){
             audio_background.pause();
             audio_win.play();
             alert('¡GANASTE!');
@@ -456,14 +479,14 @@ function sum_results(){
     var result_8 = d1 +op_8+ d2;
     
     // imprimo los resultados con eval() y toFixed() para limitar los decimales cuando es division
-    r1.attr('data-value', eval(result_1).toFixed(1));
-    r2.attr('data-value', eval(result_2).toFixed(1));
-    r3.attr('data-value', eval(result_3).toFixed(1));
-    r4.attr('data-value', eval(result_4).toFixed(1));
-    r5.attr('data-value', eval(result_5).toFixed(1));
-    r6.attr('data-value', eval(result_6).toFixed(1));
-    r7.attr('data-value', eval(result_7).toFixed(1));
-    r8.attr('data-value', eval(result_8).toFixed(1));
+    r1.attr('data-value', (!isNaN(eval(result_1)) && eval(result_1).toString().indexOf('.') != -1) ? eval(result_1).toFixed(1) : eval(result_1));
+    r2.attr('data-value', (!isNaN(eval(result_2)) && eval(result_2).toString().indexOf('.') != -1) ? eval(result_2).toFixed(1) : eval(result_2));
+    r3.attr('data-value', (!isNaN(eval(result_3)) && eval(result_3).toString().indexOf('.') != -1) ? eval(result_3).toFixed(1) : eval(result_3));
+    r4.attr('data-value', (!isNaN(eval(result_4)) && eval(result_4).toString().indexOf('.') != -1) ? eval(result_4).toFixed(1) : eval(result_4));
+    r5.attr('data-value', (!isNaN(eval(result_5)) && eval(result_5).toString().indexOf('.') != -1) ? eval(result_5).toFixed(1) : eval(result_5));
+    r6.attr('data-value', (!isNaN(eval(result_6)) && eval(result_6).toString().indexOf('.') != -1) ? eval(result_6).toFixed(1) : eval(result_6));
+    r7.attr('data-value', (!isNaN(eval(result_7)) && eval(result_7).toString().indexOf('.') != -1) ? eval(result_7).toFixed(1) : eval(result_7));
+    r8.attr('data-value', (!isNaN(eval(result_8)) && eval(result_8).toString().indexOf('.') != -1) ? eval(result_8).toFixed(1) : eval(result_8));
     
 }
 
@@ -514,8 +537,6 @@ function remove_numbers(){
             positions_widgets.push(obj);
         }
     });
-    
-    console.log(JSON.stringify(positions_widgets));
     
     localStorage.setItem('position_widgets', JSON.stringify(positions_widgets));
 }
