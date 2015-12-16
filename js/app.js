@@ -170,8 +170,7 @@ window.onload = function(){
             
             // muestro el panel del juego
             setTimeout(function(){
-                $('.content_widgets').addClass('play');
-                $('.container_results').addClass('play');
+                $('.content_widgets,.container_results,.buttons').addClass('play');
             }, 800);
             
             // inicio el juego
@@ -210,7 +209,7 @@ window.onload = function(){
 // Funcion que se llama al momento de que la página este cargada
 function init(){
     
-    audio_background.play();
+    // audio_background.play();
     
     // Funcion que me pone los resultados
     load_results();

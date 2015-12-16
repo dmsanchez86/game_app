@@ -105,10 +105,21 @@ label {
     .content_widgets .row_widgets.separator {
       min-height: 25px;
       max-height: 25px; }
-  .content_widgets .container_btn {
+
+.buttons {
+  opacity: 0;
+  -webkit-transition: all 1s ease-in-out;
+  -khtml-transition: all 1s ease-in-out;
+  -moz-transition: all 1s ease-in-out;
+  -ms-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out; }
+  .buttons.play {
+    opacity: 1; }
+  .buttons .container_btn {
     position: relative;
     text-align: center; }
-    .content_widgets .container_btn button {
+    .buttons .container_btn button {
       background-color: #1E7D22;
       padding: .5rem 15.3%;
       color: white;
@@ -130,7 +141,7 @@ label {
       -o-border-radius: 2px;
       border-radius: 2px;
       overflow: hidden; }
-      .content_widgets .container_btn button:hover {
+      .buttons .container_btn button:hover {
         top: 2px;
         -webkit-box-shadow: 0 3px #045806;
         -khtml-box-shadow: 0 3px #045806;
@@ -139,9 +150,9 @@ label {
         -o-box-shadow: 0 3px #045806;
         box-shadow: 0 3px #045806;
         outline: none; }
-      .content_widgets .container_btn button:focus {
+      .buttons .container_btn button:focus {
         outline: none; }
-      .content_widgets .container_btn button:active {
+      .buttons .container_btn button:active {
         top: 5px;
         -webkit-box-shadow: 0 0px #045806;
         -khtml-box-shadow: 0 0px #045806;
@@ -149,11 +160,11 @@ label {
         -ms-box-shadow: 0 0px #045806;
         -o-box-shadow: 0 0px #045806;
         box-shadow: 0 0px #045806; }
-  .content_widgets .container_btn {
+  .buttons .container_btn {
     position: absolute;
     bottom: 1.5rem;
     right: 1rem; }
-    .content_widgets .container_btn button {
+    .buttons .container_btn button {
       padding: 2.5rem 1rem;
       font-size: 1.5rem;
       -webkit-border-radius: 50%;
@@ -162,7 +173,7 @@ label {
       -ms-border-radius: 50%;
       -o-border-radius: 50%;
       border-radius: 50%; }
-      .content_widgets .container_btn button.restart {
+      .buttons .container_btn button.restart {
         padding: 2.5rem 0.5rem;
         background: #d32f2f;
         border-color: #d32f2f;
@@ -172,7 +183,7 @@ label {
         -ms-box-shadow: 0 5px #ef5350;
         -o-box-shadow: 0 5px #ef5350;
         box-shadow: 0 5px #ef5350; }
-        .content_widgets .container_btn button.restart:hover {
+        .buttons .container_btn button.restart:hover {
           top: 2px;
           -webkit-box-shadow: 0 3px #ef5350;
           -khtml-box-shadow: 0 3px #ef5350;
@@ -181,9 +192,9 @@ label {
           -o-box-shadow: 0 3px #ef5350;
           box-shadow: 0 3px #ef5350;
           outline: none; }
-        .content_widgets .container_btn button.restart:focus {
+        .buttons .container_btn button.restart:focus {
           outline: none; }
-        .content_widgets .container_btn button.restart:active {
+        .buttons .container_btn button.restart:active {
           top: 5px;
           -webkit-box-shadow: 0 0px #ef5350;
           -khtml-box-shadow: 0 0px #ef5350;
@@ -191,7 +202,7 @@ label {
           -ms-box-shadow: 0 0px #ef5350;
           -o-box-shadow: 0 0px #ef5350;
           box-shadow: 0 0px #ef5350; }
-      .content_widgets .container_btn button.new {
+      .buttons .container_btn button.new {
         padding: 2.5rem 1.5rem;
         background: #774111;
         border-color: #774111;
@@ -201,7 +212,7 @@ label {
         -ms-box-shadow: 0 5px #b47f44;
         -o-box-shadow: 0 5px #b47f44;
         box-shadow: 0 5px #b47f44; }
-        .content_widgets .container_btn button.new:hover {
+        .buttons .container_btn button.new:hover {
           top: 2px;
           -webkit-box-shadow: 0 3px #b47f44;
           -khtml-box-shadow: 0 3px #b47f44;
@@ -210,9 +221,9 @@ label {
           -o-box-shadow: 0 3px #b47f44;
           box-shadow: 0 3px #b47f44;
           outline: none; }
-        .content_widgets .container_btn button.new:focus {
+        .buttons .container_btn button.new:focus {
           outline: none; }
-        .content_widgets .container_btn button.new:active {
+        .buttons .container_btn button.new:active {
           top: 5px;
           -webkit-box-shadow: 0 0px #b47f44;
           -khtml-box-shadow: 0 0px #b47f44;
@@ -429,6 +440,11 @@ label {
     max-width: 15px;
     min-height: 15px;
     max-height: 15px; }
+  .separator.big {
+    min-width: 90px;
+    max-width: 90px;
+    min-height: 90px;
+    max-height: 90px; }
 
 .operator {
   background-image: url(../images/operators.png);

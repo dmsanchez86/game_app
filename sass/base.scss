@@ -59,6 +59,15 @@ label{
             max-height: 25px;
         }
     }
+}
+
+.buttons{
+    opacity: 0;
+    @include transition(all 1s ease-in-out);
+    
+    &.play{
+        opacity: 1;
+    }
     
     @include button_default;
     
@@ -307,6 +316,13 @@ label{
         max-width: 15px;
         min-height: 15px;
         max-height: 15px;
+    }
+    
+    &.big{
+        min-width: 90px;
+        max-width: 90px;
+        min-height: 90px;
+        max-height: 90px;
     }
 }
 
