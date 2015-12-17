@@ -581,57 +581,50 @@ function sum_results(){
     
 }
 
-// Funcion que quita algunos de los numeros
+// Funcion que quita algunos de los numeros dependiendo del nivel escogido
 function remove_numbers(){
     // obtengo la nivel seleccionado
     var level = localStorage.getItem('difficulty');
     
+    var position = 0;
+    var num = [];
+    
+    // posibles posiciones para el modo intermedio
+    var positions_intermediate = [
+        [0,1,3,4,5,6,8,11],
+        [0,1,2,4,5,7,9,10],
+        [1,2,3,4,6,7,9,10],
+        [0,2,3,5,6,7,8,11],
+        [0,1,2,3,8,9,10,11],
+        [0,2,3,4,6,7,8,10],
+        [0,1,2,4,5,7,8,11],
+    ];
+    
+    // posibles posiciones para el modo principiante
+    var positions_beginner = [
+        [0,3,5,6,8,11],
+        [1,3,4,6,9,10],
+        [1,2,4,7,9,10],
+        [0,6,7,9,10],
+        [0,2,5,7,8,11],
+    ];
+    
+    // si escoge jugador se borran todos los tableros
     if(level == "player"){
         $('.widget:not(.result)').removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }else if(level == "intermediate"){
-        $('.widget:not(.result)').eq(0).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        position = Math.round(Math.random() * (positions_intermediate.length - 1));
+        num = positions_intermediate[position];
+        
+        for(var i = 0; i < num.length; i++)
+            $('.widget:not(.result)').eq(num[i]).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }else{
-        $('.widget:not(.result)').eq(0).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-        $('.widget:not(.result)').eq(11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        position = Math.round(Math.random() * (positions_beginner.length - 1));
+        num = positions_beginner[position];
+        
+        for(var i = 0; i < num.length; i++)
+            $('.widget:not(.result)').eq(num[i]).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }
-    
-    // hallo 8 numeros aleatorios
-    var n1 = Math.round(Math.random() * 12);
-    var n2 = Math.round(Math.random() * 12);
-    var n3 = Math.round(Math.random() * 12);
-    var n4 = Math.round(Math.random() * 12);
-    var n5 = Math.round(Math.random() * 12);
-    var n6 = Math.round(Math.random() * 12);
-    var n7 = Math.round(Math.random() * 12);
-    var n8 = Math.round(Math.random() * 12);
-    var n9 = Math.round(Math.random() * 12);
-    var n10 = Math.round(Math.random() * 12);
-    var n11 = Math.round(Math.random() * 12);
-    var n12 = Math.round(Math.random() * 12);
-    
-    // $('.widget:not(.result)').eq(n1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n2).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n7).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n9).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n10).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
-    // $('.widget:not(.result)').eq(n12).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     
     var positions_widgets = [];
     
@@ -648,10 +641,11 @@ function remove_numbers(){
                 value: (parseInt($e.val()) == 0) ? 1 : $e.val()
             };
             $e.css('display', 'none'); // oculto el input para que no pueda cambiar al valor
-            positions_widgets.push(obj);
+            positions_widgets.push(obj); // añado los items al array para poder que se implemente el modo reiniciar
         }
     });
     
+    // guardo las posiciones en un localstorage
     localStorage.setItem('position_widgets', JSON.stringify(positions_widgets));
 }
 
