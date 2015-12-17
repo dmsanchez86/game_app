@@ -37,6 +37,12 @@ var b_4 = $('.widget[position="b4"]');
 // variable que me controlara el tiempo del cronometro
 var time_interval = null; 
 
+// Puntos
+var points = 0;
+
+// Minutos
+var minutes = 0;
+
 // Carga de la página
 window.onload = function(){
         
@@ -85,29 +91,34 @@ window.onload = function(){
         
     });
     
+    // Evento que cambia el juego
+    $('#btn_new').unbind('click').click(function(){
+        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('').css('display', 'block');
+        clearInterval(time_interval);
+        $('.container_results .time').css('color', 'white');
+        new_game();
+        audio_start.play();
+        audio_background.play();
+        $('#btn_validate').show();
+        message('Nuevo Juego...', 2000);
+    });
+    
     // Evento que me limpia todos los campos
     $('#btn_restart').unbind('click').click(function(){
         $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('');
-        // $('.operator').removeAttr('sum subtraction multiplication division');
         clearInterval(time_interval);
+        $('.container_results .time').css('color', 'white');
         restart_game();
         time();
         audio_start.play();
+        audio_background.play();
+        $('#btn_validate').show();
+        message('Reinicio del Juego...', 2000);
     });
     
     // Evento que valida el juego
     $('#btn_validate').unbind('click').click(function(){
         validate_game();
-    });
-    
-    // Evento que cambia el juego
-    $('#btn_new').unbind('click').click(function(){
-        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('').css('display', 'block');
-        // $('.operator').removeAttr('sum subtraction multiplication division');
-        clearInterval(time_interval);
-        new_game();
-        audio_start.play();
-        audio_background.play();
     });
     
     // evento de los operadores
@@ -150,8 +161,10 @@ window.onload = function(){
         var name = $('#player_name').val();
         var country = $('#player_country').val();
         var email = $('#player_email').val();
+        var difficulty = $('.content_difficulty > img.active').attr('difficulty');
+        var time_game = $('#time_game').val();
         
-        if(name == "" || country == "" || email == ""){
+        if(name == "" || country == "" || email == "" || time_game == ""){
             return;
         }else{
             // Guardo los datos del usuario
@@ -160,6 +173,11 @@ window.onload = function(){
                 'country': country,
                 'email': email
             };
+            
+            minutes = parseInt(time_game - 1);
+            
+            // Guardo la dificultad en un localstorage
+            localStorage.setItem('difficulty', difficulty);
             
             // cargo el nombre del usuario
             $('.container_results .name').text(name);
@@ -194,6 +212,65 @@ window.onload = function(){
     
     // evento de las imagenes de la dificultad
     $('.content_difficulty > img').unbind('click').click(function(){
+        var items = [
+            [
+                {
+                    value: "",
+                    text: "Seleccione el tiempo"
+                },{
+                    value: "5",
+                    text: "5 minutos"
+                },{
+                    value: "10",
+                    text: "10 Minutos"
+                },{
+                    value: "15",
+                    text: "15 Minutos"
+                },
+            ],[
+                {
+                    value: "",
+                    text: "Seleccione el tiempo"
+                },{
+                    value: "5",
+                    text: "5 minutos"
+                },{
+                    value: "10",
+                    text: "10 Minutos"
+                },{
+                    value: "15",
+                    text: "15 Minutos"
+                },{
+                    value: "30",
+                    text: "30 Minutos"
+                },{
+                    value: "60",
+                    text: "60 Minutos"
+                },
+            ]
+        ];
+        
+        // limpio el select del tiempo
+        $('#time_game').empty();
+        
+        // obtengo la dificultad
+        var level = $(this).attr('difficulty');
+        var element = null;
+        
+        if(level == "player"){
+            for(var i = 0; i < items[1].length; i++){
+                element = items[1][i];
+                $('#time_game').append('<option value="'+ element.value +'">'+ element.text +'</option>');
+            }
+        }else{
+            for(var i = 0; i < items[0].length; i++){
+                element = items[0][i];
+                $('#time_game').append('<option value="'+ element.value +'">'+ element.text +'</option>');
+            }
+        }
+        
+        $('select').material_select();
+        
         $('.content_difficulty > img').removeClass('active');
         $(this).addClass('active');
     });
@@ -201,31 +278,37 @@ window.onload = function(){
     // si ya existen datos
     if(localStorage.getItem('data_user') != null){
         var data = JSON.parse(localStorage.getItem('data_user'));
+        points = (data.points == undefined) ? 0 : data.points;
+        $('.container_results .points').text(points);
         $('#player_name').addClass('valid').val(data.name).next().addClass('active');
         $('#player_country').val(data.country);
         $('#player_email').addClass('valid').val(data.email).next().addClass('active');
     }
     
     // le doy un drag al cuadro de resultados
-    $('.container_results').draggable();
+    // $('.container_results').draggable();
     
     // ejecuto el metodo de materialize para los selects
     $('select').material_select();
+    
+    // oculto el cargador
+    $('.loader').fadeOut(1500);
     
 };
 
 // Funcion que se llama al momento de que la página este cargada
 function init(){
     
-    // audio_background.play();
+    message('Inicio del Juego...', 2000);
     
     // Funcion que me pone los resultados
     load_results();
-    time();
 }
 
 // Funcion que carga los resultados
 function load_results(){
+    audio_background.play();
+    
     // funcion que carga los numeros aleatorios
     numbers();
     
@@ -237,6 +320,8 @@ function load_results(){
     
     // funcion que remueve algunos numeros
     remove_numbers();
+    
+    time();
 }
 
 // funcion que valida si el juego es correcto o incorrecto
@@ -258,7 +343,6 @@ function validate_game(){
     // valida si inserto numeros en todos los campos
     if(isNaN(a1) || isNaN(a2) || isNaN(a3) || isNaN(a4) || isNaN(b1) || isNaN(b2) || isNaN(b3) || isNaN(b4) || isNaN(c1) || isNaN(c2) || isNaN(d1) || isNaN(d2)){
         audio_incorrect.play();
-        alert('Ingrese todos los números');
     }else{
         // hallo los operadores antes puestos
         var operators = JSON.parse(localStorage.getItem('operators'));
@@ -277,12 +361,12 @@ function validate_game(){
         var result_2 = a2 +op_2+ b2 +op_2+ c2 +op_2+ d2;
         var result_3 = a1 +op_3+ a2 +op_3+ a3 +op_3+ a4;
         var result_4 = b1 +op_4+ b2 +op_4+ b3 +op_4+ b4;
-        
         var result_5 = a3 +op_5+ b3;
         var result_6 = a4 +op_6+ b4;
         var result_7 = c1 +op_7+ c2;
         var result_8 = d1 +op_8+ d2;
         
+        // valores de los cuadros de los resultados
         var res1 = parseFloat(r1.attr('data-value'));
         var res2 = parseFloat(r2.attr('data-value'));
         var res3 = parseFloat(r3.attr('data-value'));
@@ -306,15 +390,19 @@ function validate_game(){
         if(final_r1 == res1 && final_r2 == res2 && final_r3 == res3 && final_r4 == res4  && final_r5 == res5 && final_r6 == res6 && final_r7 == res7 && final_r8 == res8){
             audio_background.pause();
             audio_win.play();
-            alert('¡GANASTE!');
+            message('¡GANASTE!', 5000);
+            points++; // incremento los puntos
+            var data_user = JSON.parse(localStorage.getItem('data_user')); // obtengo la informacion del usuario
+            data_user.points = points;
+            localStorage.setItem('data_user', JSON.stringify(data_user)); // actualizo
+            $('.container_results .points').text(points);
         }else{
             audio_background.pause();
             audio_incorrect.play();
-            alert('¡PERDISTE!');
+            message('¡PERDISTE!', 5000);
         }
         
-        // Inicio un nuevo juego
-        btn_new.click();
+        $('#btn_validate').hide();
     }
     
 }
@@ -323,44 +411,47 @@ function validate_game(){
 function new_game(){
     // Funcion que me pone los resultados
     load_results();
-    time();
 }
 
 // funcion que hace correr el tiempo
 function time(){
-    var hours = 0;
-    var minutes = 2;
     var seconds = 60;
     var string_time = "";
+    
     time_interval = setInterval(function(){
         seconds--;
+        
+        string_time = "00:"+minutes+":"+seconds;
         
         if(seconds < 0){
             minutes--;
             
+            // el tiempo se acaba
             if(minutes < 0){
                 audio_background.pause();
                 clearInterval(time_interval);
                 audio_incorrect.play();
-                alert('el juego ha terminado!');
-                btn_new.click();
+                $('.container_results .time').css('color', 'white');
+                string_time = "00:00:00";
+                $('.container_results .time').text(string_time);
+                $('#btn_validate').hide();
+                message('¡El juego ha terminado!', 10000);
             }
             seconds = 59;
+        }else{
+            if(minutes < 10){
+                string_time = "00:0"+minutes+":"+seconds;
+                if(seconds < 10)
+                    string_time = "00:0"+minutes+":0"+seconds
+            }else{
+                string_time = "00:"+minutes+":"+seconds;
+                if(seconds < 10)
+                    string_time = "00:"+minutes+":0"+seconds
+            }
         }
         
-        if(hours < 10){
-            string_time = "0"+hours+':'+minutes+":"+seconds;
-            if(minutes < 10){
-                string_time = "0"+hours+':0'+minutes+":"+seconds;
-                if(seconds < 10){
-                    string_time = "0"+hours+':0'+minutes+":0"+seconds
-                }
-            }else{
-                string_time = "0"+hours+':'+minutes+":"+seconds;
-                if(seconds < 10){
-                    string_time = "0"+hours+':'+minutes+":0"+seconds
-                }
-            }
+        if(minutes < 1){ // si el tiempo es menor a 1 minuto
+            $('.container_results .time').css('color', '#E53935');
         }
         
         $('.container_results .time').text(string_time);
@@ -492,6 +583,29 @@ function sum_results(){
 
 // Funcion que quita algunos de los numeros
 function remove_numbers(){
+    // obtengo la nivel seleccionado
+    var level = localStorage.getItem('difficulty');
+    
+    if(level == "player"){
+        $('.widget:not(.result)').removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    }else if(level == "intermediate"){
+        $('.widget:not(.result)').eq(0).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(1).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(4).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    }else{
+        $('.widget:not(.result)').eq(0).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(3).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(5).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(6).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(8).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').eq(11).removeClass('valid').attr('data-value', '').find('.value_input').val('');
+    }
+    
     // hallo 8 numeros aleatorios
     var n1 = Math.round(Math.random() * 12);
     var n2 = Math.round(Math.random() * 12);
@@ -547,4 +661,9 @@ function restart_game(){
     
     for(var i = 0; i < widgets_positions.length; i++)
         $('.widget[position]').eq(widgets_positions[i].position).addClass('valid').attr('data-value', widgets_positions[i].value).find('.value_input').val(widgets_positions[i].value);
+}
+
+// funcion que despliega mensajes con el toast de materialize
+function message(text, duration){
+    Materialize.toast(text, duration);
 }

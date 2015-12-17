@@ -18,7 +18,7 @@ body{
 body{
     font-size: 100%;
     overflow: hidden;
-    @include gradient(radial, (center, #774111, #b47f44));
+    @include gradient(radial, (center, $blue_primary, $blue_secondary));
 }
 
 label{
@@ -36,9 +36,22 @@ label{
     @include perspective-origin(center);
 }
 
+.loader{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    left: 0;
+    background: white;
+    @include flex(flex);
+    @include align-items(center);
+    @include justify-content(center);
+}
+
 .content_widgets{
     max-width: 100%;
-    background: transparent;
+    background: white;
     padding: .5rem;
     backface-visibility: hidden;
     @include transform(rotatey(180deg));
@@ -75,21 +88,24 @@ label{
         position: absolute;
         bottom: 1.5rem;
         right: 1rem;
+        @include flex(flex);
+        @include flex-direction(column);
         
         button{
+            margin: .25rem 0;
             padding: 2.5rem 1rem;
             font-size: 1.5rem;
             @include border-radius(50%);
             
             &.restart{
                 padding: 2.5rem 0.5rem;
-                background: #d32f2f;
-                border-color: #d32f2f;
-                @include box-shadow(( 0 5px #ef5350 ));
+                background: $red_primary;
+                border-color: $red_primary;
+                @include box-shadow(( 0 5px $red_secondary ));
                 
                 &:hover{
     				top: 2px;
-    				@include box-shadow(0 3px #ef5350);
+    				@include box-shadow(0 3px $red_secondary);
     				outline: none;
     			}
     
@@ -99,19 +115,19 @@ label{
     
     			&:active{
     				top: 5px;
-    				@include box-shadow(0 0px #ef5350);
+    				@include box-shadow(0 0px $red_secondary);
     			}
             }
             
             &.new{
                 padding: 2.5rem 1.5rem;
-                background: $brown_secondary;
-                border-color: $brown_secondary;
-                @include box-shadow(( 0 5px $brown_primary ));
+                background: #945217;
+                border-color: #945217;
+                @include box-shadow(( 0 5px $brown_secondary ));
                 
                 &:hover{
     				top: 2px;
-    				@include box-shadow(0 3px $brown_primary);
+    				@include box-shadow(0 3px $brown_secondary);
     				outline: none;
     			}
     
@@ -121,7 +137,7 @@ label{
     
     			&:active{
     				top: 5px;
-    				@include box-shadow(0 0px $brown_primary);
+    				@include box-shadow(0 0px $brown_secondary);
     			}
             }
         }
@@ -452,7 +468,7 @@ audio{
     @include transition(all .5s ease-in-out);
     
     .content{
-        max-width: 310px;
+        max-width: 500px;
         background: white;
         padding: 2rem;
         @include border-radius(5px);
@@ -462,15 +478,15 @@ audio{
     
     .container_btn{
         button{
-            background: $brown_secondary;
-            border-color: $brown_secondary;
+            background: $blue_secondary;
+            border-color: $blue_secondary;
             font-size: 1.4rem;
             width: 100%;
-            @include box-shadow(0 5px $brown_primary);
+            @include box-shadow(0 5px #1565c0);
             
             &:hover{
 				top: 2px;
-				@include box-shadow(0 3px $brown_primary);
+				@include box-shadow(0 3px #1565c0);
 				outline: none;
 			}
 
@@ -480,7 +496,7 @@ audio{
 
 			&:active{
 				top: 5px;
-				@include box-shadow(0 0px $brown_primary);
+				@include box-shadow(0 0px #1565c0);
 			}
         }
     }
@@ -500,20 +516,28 @@ audio{
 }
 
 input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]){
-    border-bottom: 1px solid #9E6831;
-    box-shadow: 0 1px 0 0 #8E5824;
+    border-bottom: 1px solid #1565c0;
+    box-shadow: 0 1px 0 0 #1565c0;
 }
 
 input[type=text]:focus:not([readonly])+label, input[type=password]:focus:not([readonly])+label, input[type=email]:focus:not([readonly])+label, input[type=url]:focus:not([readonly])+label, input[type=time]:focus:not([readonly])+label, input[type=date]:focus:not([readonly])+label, input[type=datetime-local]:focus:not([readonly])+label, input[type=tel]:focus:not([readonly])+label, input[type=number]:focus:not([readonly])+label, input[type=search]:focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label{
-    color: #925C27;
+    color: #1565c0;
 }
 
 .dropdown-content li>a, .dropdown-content li>span{
-    color: #935E29;
+    color: #1565c0;
 }
 
 .content_difficulty{
     padding: 0 1rem 1rem;
+    text-align: center;
+    position: relative;
+    
+    > label{
+        top: -12px;
+        position: absolute;
+        left: 1rem;
+    }
     
     > img{
         cursor: pointer;
