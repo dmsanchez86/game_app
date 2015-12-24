@@ -43,63 +43,64 @@ var points = 0;
 // Minutos
 var minutes = 0;
 
-// Datos del usuario
-var data_user = {};
-
 // Carga de la página
 window.onload = function(){
         
     // hover del widget que pone el foco en el input
-    $('.widget:not(.result)').unbind('mouseenter').mouseenter(function(e){
-        if(!$(this).hasClass('static'))
-            $(this).addClass("edit").find('.value_input').focus();
+    $('.widget:not(.result, .valid)').unbind('mouseenter').mouseenter(function(e){
+        $(this).addClass("edit").find('.value_input').focus();
     });
     
     // cuando sale del hover
-    $('.widget:not(.result)').unbind('mouseleave').mouseleave(function(e){
+    $('.widget:not(.result, .valid)').unbind('mouseleave').mouseleave(function(e){
         $(this).removeClass("edit").find('.value_input').blur();
-        
-        if(!$(this).hasClass('static')){
-            
-            var value = $(this).find('.value .value_input').val();
-            
-            // Si no es un número o es mayor a 100 que ya tiene 3 cifras o si es menor que -99
-            if(isNaN(value) || value > 99 || value < -99 || value == ""){
-                $(this).attr('data-value', '');
-                $(this).find('.value .value_input').val('');
-                $(this).removeClass('valid');
-            }else {
-                $(this).attr('data-value', value);
-                $(this).addClass('valid');
-            }
-            
-            // le quito al widget la clase edit
-            $(this).removeClass('edit');
-        }
     });
         
     // cuando este focus el widget
     $('.widget:not(.result, .valid)').unbind('focus').focus(function(e){
-        if(!$(this).hasClass('static'))
-            $(this).addClass("edit").find('.value_input').focus();
+        $(this).addClass("edit").find('.value_input').focus();
     });
         
     // cuando pierda el foco el widget
     $('.widget:not(.result, .valid)').unbind('blur').blur(function(e){
-        if(!$(this).hasClass('static'))
-            $(this).removeClass("edit").find('.value_input').blur();
+        $(this).removeClass("edit").find('.value_input').blur();
+    });
+    
+    // Evento cuando los input de los widgets obtinene el foco
+    $('.widget:not(.result, .valid) .value_input').unbind('focus').focus(function(){
+        $(this).parent().parent().addClass('edit').removeClass('valid');
+    });
+    
+    // Evento cuando los input de los widgets pierden el foco
+    $('.widget:not(.result, .valid) .value_input').unbind('blur').blur(function(){
+        
+        var value = $(this).val();
+        
+        // Si no es un número o es mayor a 100 que ya tiene 3 cifras o si es menor que -99
+        if(isNaN(value) || value > 99 || value < -99 || value == ""){
+            $(this).parent().parent().attr('data-value', '');
+            $(this).val('');
+            $(this).parent().parent().removeClass('valid');
+        }else {
+            $(this).parent().parent().attr('data-value', value);
+            $(this).parent().parent().addClass('valid');
+        }
+        
+        // le quito al widget la clase edit
+        $(this).parent().parent().removeClass('edit');
+        
     });
     
     // Evento que cambia el juego
     $('#btn_new').unbind('click').click(function(){
-        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('').css('display', 'block'); // restauro todos los widgets
-        clearInterval(time_interval); // paro el tiempo
-        $('.container_results .time').css('color', 'white'); // pongo el tiempo blanco por si llego a estar rojo
-        new_game(); // lanzo un nuevo juego
-        audio_start.play(); // sonido de comienzo
-        audio_background.play(); // sonido de fondo
-        $('#btn_validate').show(); // muestro el boton de validar nuevamente
-        message('Nuevo Juego...', 2000); // muestro un mensaje
+        $('.widget[position]').removeClass('valid').removeAttr('data-value').find('.value_input').val('').css('display', 'block');
+        clearInterval(time_interval);
+        $('.container_results .time').css('color', 'white');
+        new_game();
+        audio_start.play();
+        audio_background.play();
+        $('#btn_validate').show();
+        message('Nuevo Juego...', 2000);
     });
     
     // Evento que me limpia todos los campos
@@ -108,6 +109,7 @@ window.onload = function(){
         clearInterval(time_interval);
         $('.container_results .time').css('color', 'white');
         restart_game();
+        time();
         audio_start.play();
         audio_background.play();
         $('#btn_validate').show();
@@ -120,28 +122,28 @@ window.onload = function(){
     });
     
     // evento de los operadores
-    // $('.operator').unbind('click').click(function(){
-    //     // borro todas los actives de los operadores
-    //     $('.operator').removeClass('active');
+    $('.operator').unbind('click').click(function(){
+        // borro todas los actives de los operadores
+        $('.operator').removeClass('active');
         
-    //     // Le añado la clase active al que se le da click
-    //     // $(this).addClass('active');
-    // });
+        // Le añado la clase active al que se le da click
+        // $(this).addClass('active');
+    });
     
     // Evento que cierra el menu de los operadores
-    // $('.menu_operators .close_menu').unbind('click').click(function(){
-    //     setTimeout(function(){ $('.operator').removeClass('active'); },300);
-    // });
+    $('.menu_operators .close_menu').unbind('click').click(function(){
+        setTimeout(function(){ $('.operator').removeClass('active'); },300);
+    });
     
     // Evento que cambia el operador
-    // $('.menu_operators > div').unbind('click').click(function(){
-    //     var operator = $(this).attr('operator');
-    //     $(this).parent().parent().removeAttr('sum subtraction multiplication division').attr(operator, '');
-    // });
+    $('.menu_operators > div').unbind('click').click(function(){
+        var operator = $(this).attr('operator');
+        $(this).parent().parent().removeAttr('sum subtraction multiplication division').attr(operator, '');
+    });
     
     // evento que cambia el nombre del usuario
     $('.container_results .name').unbind('click').click(function(){
-        var name = prompt("Nombre del jugador:", $(this).text());
+        var name = prompt("Ingrese el nombre del jugador", $(this).text());
         
         if(name == "" || name == undefined){
             return;
@@ -149,12 +151,8 @@ window.onload = function(){
             // cargo el nombre del usuario
             $('.container_results .name').text(name);
             
-            data_user.name = name;
-            
             // Guardo el nombre en un local storage
-            localStorage.setItem('data_user', JSON.stringify(data_user));
-            
-            message("Nombre de usuario cambiado", 1500);
+            localStorage.setItem('name', name);
         }
     });
     
@@ -166,31 +164,14 @@ window.onload = function(){
         var difficulty = $('.content_difficulty > img.active').attr('difficulty');
         var time_game = $('#time_game').val();
         
-        var expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        
-        if(name == ""){
-            message("¡El nombre es obligatorio!", 2000);
-            $('#player_name').focus();
-        }else if(country == ""){
-            message("¡El país es obligatorio!", 2000);
-            $('#player_country').parent().find('input').focus();
-        }else if(email == ""){
-            message("¡El correo electrónico es obligatorio!", 2000);
-            $('#player_email').focus();
-        }else if(!expr.test(email)){
-            message("¡El correo electrónico no es valido!", 2000);
-            $('#player_email').focus();
-        }else if(time_game == ""){
-            message("¡Seleccione un tiempo!", 2000);
-            $('#time_game').parent().find('input').focus();
+        if(name == "" || country == "" || email == "" || time_game == ""){
+            return;
         }else{
             // Guardo los datos del usuario
-            data_user = {
+            var data_user = {
                 'name': name,
                 'country': country,
-                'email': email,
-                'difficulty': difficulty,
-                'points': 0
+                'email': email
             };
             
             minutes = parseInt(time_game - 1);
@@ -201,21 +182,19 @@ window.onload = function(){
             // cargo el nombre del usuario
             $('.container_results .name').text(name);
             
-            console.log(data_user.points);
-            
-            // Guardo la informacion del usuario en un local storage
+            // Guardo el nombre en un local storage
             localStorage.setItem('data_user', JSON.stringify(data_user));
             
             // oculto el panel principal
             $('.main_panel').css({
-                '-webkit-transform':'scale(0) rotatez(360deg) rotatey(360deg) rotatex(360deg)',
-                '-moz-transform':'scale(0) rotatez(360deg) rotatey(360deg) rotatex(360deg)',
-                '-ms-transform':'scale(0) rotatez(360deg) rotatey(360deg) rotatex(360deg)',
-                '-o-transform':'scale(0) rotatez(360deg) rotatey(360deg) rotatex(360deg)',
-                'transform':'scale(0) rotatez(360deg) rotatey(360deg) rotatex(360deg)'
+                '-webkit-transform':'scale(0) rotatez(360deg)',
+                '-moz-transform':'scale(0) rotatez(360deg)',
+                '-ms-transform':'scale(0) rotatez(360deg)',
+                '-o-transform':'scale(0) rotatez(360deg)',
+                'transform':'scale(0) rotatez(360deg)'
             });
             
-            // muestro el panel del juego y los botones
+            // muestro el panel del juego
             setTimeout(function(){
                 $('.content_widgets,.container_results,.buttons').addClass('play');
             }, 800);
@@ -278,7 +257,6 @@ window.onload = function(){
         var level = $(this).attr('difficulty');
         var element = null;
         
-        // Lleno el select
         if(level == "player"){
             for(var i = 0; i < items[1].length; i++){
                 element = items[1][i];
@@ -302,12 +280,9 @@ window.onload = function(){
         var data = JSON.parse(localStorage.getItem('data_user'));
         points = (data.points == undefined) ? 0 : data.points;
         $('.container_results .points').text(points);
-        $('.container_results .points').text(points);
         $('#player_name').addClass('valid').val(data.name).next().addClass('active');
         $('#player_country').val(data.country);
         $('#player_email').addClass('valid').val(data.email).next().addClass('active');
-        $('.content_difficulty > img').removeClass('active');
-        $('.content_difficulty img[difficulty="'+ data.difficulty +'"]').addClass('active');
     }
     
     // le doy un drag al cuadro de resultados
@@ -317,7 +292,7 @@ window.onload = function(){
     $('select').material_select();
     
     // oculto el cargador
-    $('.loader').fadeOut(1000);
+    $('.loader').fadeOut(1500);
     
 };
 
@@ -368,7 +343,6 @@ function validate_game(){
     // valida si inserto numeros en todos los campos
     if(isNaN(a1) || isNaN(a2) || isNaN(a3) || isNaN(a4) || isNaN(b1) || isNaN(b2) || isNaN(b3) || isNaN(b4) || isNaN(c1) || isNaN(c2) || isNaN(d1) || isNaN(d2)){
         audio_incorrect.play();
-        message('¡Llene todos los campos!');
     }else{
         // hallo los operadores antes puestos
         var operators = JSON.parse(localStorage.getItem('operators'));
@@ -418,6 +392,7 @@ function validate_game(){
             audio_win.play();
             message('¡GANASTE!', 5000);
             points++; // incremento los puntos
+            var data_user = JSON.parse(localStorage.getItem('data_user')); // obtengo la informacion del usuario
             data_user.points = points;
             localStorage.setItem('data_user', JSON.stringify(data_user)); // actualizo
             $('.container_results .points').text(points);
@@ -427,7 +402,7 @@ function validate_game(){
             message('¡PERDISTE!', 5000);
         }
         
-        $('#btn_validate').hide(); // oculto el boton de validar si gana o pierde
+        $('#btn_validate').hide();
     }
     
 }
@@ -483,344 +458,365 @@ function time(){
     },1000);
 }
 
+
+
 var arr = [];
 
-function shuffle(){
+function shuffle()
+{
     
     var d = [
+    
       {
-        "a1" : 11, 
-        "b1" : 12,
-        "c1" : 6,
-        "d1" : 9,
-        "a2" : 10,
-        "b2" : 5,
-        "c2" : 1,
-        "d2" : 3,
-        "a3" : 7,
-        "b3" : 4,
-        "a4" : 8,
-        "b4" : 2,
+        a1 : 11, 
+        b1 : 12,
+        c1 : 6,
+        d1 : 9,
+        a2 : 10,
+        b2 : 5,
+        c2 : 1,
+        d2 : 3,
+        a3 : 7,
+        b3 : 4,
+        a4 : 8,
+        b4 : 2,
       }
       ,
       {
-        "a1" : 7, 
-        "b1" : 11,
-        "c1" : 8,
-        "d1" : 4,
-        "a2" : 10,
-        "b2" : 1,
-        "c2" : 6,
-        "d2" : 2,
-        "a3" : 12,
-        "b3" : 5,
-        "a4" : 9,
-        "b4" : 3,
+        a1 : 7, 
+        b1 : 11,
+        c1 : 8,
+        d1 : 4,
+        a2 : 10,
+        b2 : 1,
+        c2 : 6,
+        d2 : 2,
+        a3 : 12,
+        b3 : 5,
+        a4 : 9,
+        b4 : 3,
       }
       ,
       {
-        "a1" : 10, 
-        "b1" : 9,
-        "c1" : 7,
-        "d1" : 12,
-        "a2" : 11,
-        "b2" : 1,
-        "c2" : 3,
-        "d2" : 6,
-        "a3" : 5,
-        "b3" : 2,
-        "a4" : 8,
-        "b4" : 4,
+        a1 : 10, 
+        b1 : 9,
+        c1 : 7,
+        d1 : 12,
+        a2 : 11,
+        b2 : 1,
+        c2 : 3,
+        d2 : 6,
+        a3 : 5,
+        b3 : 2,
+        a4 : 8,
+        b4 : 4,
       }
       ,
       {
-        "a1" : 6, 
-        "b1" : 10,
-        "c1" : 12,
-        "d1" : 8,
-        "a2" : 11,
-        "b2" : 2,
-        "c2" : 5,
-        "d2" : 4,
-        "a3" : 7,
-        "b3" : 1,
-        "a4" : 9,
-        "b4" : 3,
+        a1 : 6, 
+        b1 : 10,
+        c1 : 12,
+        d1 : 8,
+        a2 : 11,
+        b2 : 2,
+        c2 : 5,
+        d2 : 4,
+        a3 : 7,
+        b3 : 1,
+        a4 : 9,
+        b4 : 3,
       }
       ,
       {
-        "a1" : 8, 
-        "b1" : 10,
-        "c1" : 9,
-        "d1" : 12,
-        "a2" : 11,
-        "b2" : 2,
-        "c2" : 5,
-        "d2" : 4,
-        "a3" : 7,
-        "b3" : 6,
-        "a4" : 3,
-        "b4" : 1,
+        a1 : 8, 
+        b1 : 10,
+        c1 : 9,
+        d1 : 12,
+        a2 : 11,
+        b2 : 2,
+        c2 : 5,
+        d2 : 4,
+        a3 : 7,
+        b3 : 6,
+        a4 : 3,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 7, 
-        "b1" : 10,
-        "c1" : 6,
-        "d1" : 12,
-        "a2" : 9,
-        "b2" : 2,
-        "c2" : 4,
-        "d2" : 3,
-        "a3" : 8,
-        "b3" : 5,
-        "a4" : 11,
-        "b4" : 1,
+        a1 : 7, 
+        b1 : 10,
+        c1 : 6,
+        d1 : 12,
+        a2 : 9,
+        b2 : 2,
+        c2 : 4,
+        d2 : 3,
+        a3 : 8,
+        b3 : 5,
+        a4 : 11,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 9, 
-        "b1" : 10,
-        "c1" : 6,
-        "d1" : 12,
-        "a2" : 11,
-        "b2" : 5,
-        "c2" : 4,
-        "d2" : 2,
-        "a3" : 7,
-        "b3" : 3,
-        "a4" : 8,
-        "b4" : 1,
+        a1 : 9, 
+        b1 : 10,
+        c1 : 6,
+        d1 : 12,
+        a2 : 11,
+        b2 : 5,
+        c2 : 4,
+        d2 : 2,
+        a3 : 7,
+        b3 : 3,
+        a4 : 8,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 9, 
-        "b1" : 10,
-        "c1" : 8,
-        "d1" : 12,
-        "a2" : 11,
-        "b2" : 4,
-        "c2" : 5,
-        "d2" : 2,
-        "a3" : 7,
-        "b3" : 3,
-        "a4" : 6,
-        "b4" : 1,
+        a1 : 9, 
+        b1 : 10,
+        c1 : 8,
+        d1 : 12,
+        a2 : 11,
+        b2 : 4,
+        c2 : 5,
+        d2 : 2,
+        a3 : 7,
+        b3 : 3,
+        a4 : 6,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 7, 
-        "b1" : 11,
-        "c1" : 10,
-        "d1" : 9,
-        "a2" : 12,
-        "b2" : 4,
-        "c2" : 5,
-        "d2" : 3,
-        "a3" : 2,
-        "b3" : 6,
-        "a4" : 8,
-        "b4" : 1,
+        a1 : 7, 
+        b1 : 11,
+        c1 : 10,
+        d1 : 9,
+        a2 : 12,
+        b2 : 4,
+        c2 : 5,
+        d2 : 3,
+        a3 : 2,
+        b3 : 6,
+        a4 : 8,
+        b4 : 1,
       }
         ,
       {
-        "a1" : 8, 
-        "b1" : 10,
-        "c1" : 7,
-        "d1" : 11,
-        "a2" : 9,
-        "b2" : 2,
-        "c2" : 5,
-        "d2" : 1,
-        "a3" : 6,
-        "b3" : 4,
-        "a4" : 12,
-        "b4" : 3,
+        a1 : 8, 
+        b1 : 10,
+        c1 : 7,
+        d1 : 11,
+        a2 : 9,
+        b2 : 2,
+        c2 : 5,
+        d2 : 1,
+        a3 : 6,
+        b3 : 4,
+        a4 : 12,
+        b4 : 3,
       }
       ,
       {
-        "a1" : 7, 
-        "b1" : 12,
-        "c1" : 10,
-        "d1" : 9,
-        "a2" : 11,
-        "b2" : 1,
-        "c2" : 2,
-        "d2" : 3,
-        "a3" : 6,
-        "b3" : 5,
-        "a4" : 8,
-        "b4" : 4,
+        a1 : 7, 
+        b1 : 12,
+        c1 : 10,
+        d1 : 9,
+        a2 : 11,
+        b2 : 1,
+        c2 : 2,
+        d2 : 3,
+        a3 : 6,
+        b3 : 5,
+        a4 : 8,
+        b4 : 4,
       }
       ,
       {
-        "a1" : 8, 
-        "b1" : 12,
-        "c1" : 7,
-        "d1" : 9,
-        "a2" : 11,
-        "b2" : 4,
-        "c2" : 3,
-        "d2" : 1,
-        "a3" : 6,
-        "b3" : 2,
-        "a4" : 10,
-        "b4" : 5,
+        a1 : 8, 
+        b1 : 12,
+        c1 : 7,
+        d1 : 9,
+        a2 : 11,
+        b2 : 4,
+        c2 : 3,
+        d2 : 1,
+        a3 : 6,
+        b3 : 2,
+        a4 : 10,
+        b4 : 5,
       }
       ,
       {
-        "a1" : 9, 
-        "b1" : 10,
-        "c1" : 7,
-        "d1" : 8,
-        "a2" : 12,
-        "b2" : 5,
-        "c2" : 4,
-        "d2" : 1,
-        "a3" : 11,
-        "b3" : 2,
-        "a4" : 6,
-        "b4" : 3,
+        a1 : 9, 
+        b1 : 10,
+        c1 : 7,
+        d1 : 8,
+        a2 : 12,
+        b2 : 5,
+        c2 : 4,
+        d2 : 1,
+        a3 : 11,
+        b3 : 2,
+        a4 : 6,
+        b4 : 3,
       }
       ,
       {
-        "a1" : 11, 
-        "b1" : 7,
-        "c1" : 9,
-        "d1" : 8,
-        "a2" : 10,
-        "b2" : 1,
-        "c2" : 5,
-        "d2" : 4,
-        "a3" : 6,
-        "b3" : 3,
-        "a4" : 12,
-        "b4" : 2,
+        a1 : 11, 
+        b1 : 7,
+        c1 : 9,
+        d1 : 8,
+        a2 : 10,
+        b2 : 1,
+        c2 : 5,
+        d2 : 4,
+        a3 : 6,
+        b3 : 3,
+        a4 : 12,
+        b4 : 2,
       }
       ,
       {
-        "a1" : 11, 
-        "b1" : 10,
-        "c1" : 5,
-        "d1" : 6,
-        "a2" : 9,
-        "b2" : 2,
-        "c2" : 4,
-        "d2" : 3,
-        "a3" : 8,
-        "b3" : 7,
-        "a4" : 12,
-        "b4" : 1,
+        a1 : 11, 
+        b1 : 10,
+        c1 : 5,
+        d1 : 6,
+        a2 : 9,
+        b2 : 2,
+        c2 : 4,
+        d2 : 3,
+        a3 : 8,
+        b3 : 7,
+        a4 : 12,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 11, 
-        "b1" : 10,
-        "c1" : 5,
-        "d1" : 6,
-        "a2" : 9,
-        "b2" : 2,
-        "c2" : 4,
-        "d2" : 3,
-        "a3" : 8,
-        "b3" : 7,
-        "a4" : 12,
-        "b4" : 1,
+        a1 : 11, 
+        b1 : 10,
+        c1 : 5,
+        d1 : 6,
+        a2 : 9,
+        b2 : 2,
+        c2 : 4,
+        d2 : 3,
+        a3 : 8,
+        b3 : 7,
+        a4 : 12,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 9, 
-        "b1" : 11,
-        "c1" : 5,
-        "d1" : 8,
-        "a2" : 12,
-        "b2" : 6,
-        "c2" : 3,
-        "d2" : 2,
-        "a3" : 7,
-        "b3" : 4,
-        "a4" : 10,
-        "b4" : 1,
+        a1 : 9, 
+        b1 : 11,
+        c1 : 5,
+        d1 : 8,
+        a2 : 12,
+        b2 : 6,
+        c2 : 3,
+        d2 : 2,
+        a3 : 7,
+        b3 : 4,
+        a4 : 10,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 11, 
-        "b1" : 7,
-        "c1" : 9,
-        "d1" : 8,
-        "a2" : 10,
-        "b2" : 1,
-        "c2" : 5,
-        "d2" : 4,
-        "a3" : 6,
-        "b3" : 3,
-        "a4" : 12,
-        "b4" : 1,
+        a1 : 11, 
+        b1 : 7,
+        c1 : 9,
+        d1 : 8,
+        a2 : 10,
+        b2 : 1,
+        c2 : 5,
+        d2 : 4,
+        a3 : 6,
+        b3 : 3,
+        a4 : 12,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 12, 
-        "b1" : 11,
-        "c1" : 8,
-        "d1" : 4,
-        "a2" : 10,
-        "b2" : 3,
-        "c2" : 5,
-        "d2" : 2,
-        "a3" : 9,
-        "b3" : 7,
-        "a4" : 6,
-        "b4" : 1,
+        a1 : 12, 
+        b1 : 11,
+        c1 : 8,
+        d1 : 4,
+        a2 : 10,
+        b2 : 3,
+        c2 : 5,
+        d2 : 2,
+        a3 : 9,
+        b3 : 7,
+        a4 : 6,
+        b4 : 1,
       }
       ,
       {
-        "a1" : 9, 
-        "b1" : 11,
-        "c1" : 6,
-        "d1" : 12,
-        "a2" : 10,
-        "b2" : 3,
-        "c2" : 4,
-        "d2" : 2,
-        "a3" : 5,
-        "b3" : 7,
-        "a4" : 8,
-        "b4" : 1,
+        a1 : 9, 
+        b1 : 11,
+        c1 : 6,
+        d1 : 12,
+        a2 : 10,
+        b2 : 3,
+        c2 : 4,
+        d2 : 2,
+        a3 : 5,
+        b3 : 7,
+        a4 : 8,
+        b4 : 1,
       }
     ];
     
-    var n = Math.round(Math.random() * (19) + 0);
     
-    if(ultimo != n)
+
+    var n = Math.round(Math.random() * (19 - 0) + 0);
+    
+    if(ultimo != n){
         ultimo = n;
-    else
+    }
+    else{
         n = Math.round(Math.random() * (19 - 0) + 0);
+    }
     
     arr = d[n];
-    
-    console.log(d[n]);
+  
 }
 
 var ultimo = 0;
 
+
+
 // funcion que me carga aleatoriamente los 12 numeros del tablero
 function numbers(){
     
+    
+
     shuffle();
+    /*
+   rand4 = Math.round(Math.random() * (rand4 - 1) + 1);  
+   
+   //if pair
+  
+   
+   if(rand4 % 2 != 0 && rand8 % 2 == 0){
+       rand8++;
+   }*/
+   
     
     // imprimo los numeros en el dom
-    $('.widget[position="a1"]').addClass('valid static').attr('data-value', arr["a1"]).find('.value_input').val(arr["a1"]);
-    $('.widget[position="b1"]').addClass('valid static').attr('data-value', arr["b1"]).find('.value_input').val(arr["b1"]);
-    $('.widget[position="c1"]').addClass('valid static').attr('data-value', arr["c1"]).find('.value_input').val(arr["c1"]);
-    $('.widget[position="d1"]').addClass('valid static').attr('data-value', arr["d1"]).find('.value_input').val(arr["d1"]);
-    $('.widget[position="a2"]').addClass('valid static').attr('data-value', arr["a2"]).find('.value_input').val(arr["a2"]);
-    $('.widget[position="b2"]').addClass('valid static').attr('data-value', arr["b2"]).find('.value_input').val(arr["b2"]);
-    $('.widget[position="c2"]').addClass('valid static').attr('data-value', arr["c2"]).find('.value_input').val(arr["c2"]);
-    $('.widget[position="d2"]').addClass('valid static').attr('data-value', arr["d2"]).find('.value_input').val(arr["d2"]);
-    $('.widget[position="a3"]').addClass('valid static').attr('data-value', arr["a3"]).find('.value_input').val(arr["a3"]);
-    $('.widget[position="b3"]').addClass('valid static').attr('data-value', arr["b3"]).find('.value_input').val(arr["b3"]);
-    $('.widget[position="a4"]').addClass('valid static').attr('data-value', arr["a4"]).find('.value_input').val(arr["a4"]);
-    $('.widget[position="b4"]').addClass('valid static').attr('data-value', arr["b4"]).find('.value_input').val(arr["b4"]);
+    $('.widget[position="a1"]').addClass('valid').attr('data-value', arr["a1"]).find('.value_input').val(arr["a1"]);
+    $('.widget[position="b1"]').addClass('valid').attr('data-value', arr["b1"]).find('.value_input').val(arr["b1"]);
+    $('.widget[position="c1"]').addClass('valid').attr('data-value', arr["c1"]).find('.value_input').val(arr["c1"]);
+    $('.widget[position="d1"]').addClass('valid').attr('data-value', arr["d1"]).find('.value_input').val(arr["d1"]);
+    $('.widget[position="a2"]').addClass('valid').attr('data-value', arr["a2"]).find('.value_input').val(arr["a2"]);
+    $('.widget[position="b2"]').addClass('valid').attr('data-value', arr["b2"]).find('.value_input').val(arr["b2"]);
+    $('.widget[position="c2"]').addClass('valid').attr('data-value', arr["c2"]).find('.value_input').val(arr["b2"]);
+    $('.widget[position="d2"]').addClass('valid').attr('data-value', arr["d2"]).find('.value_input').val(arr["d2"]);
+    $('.widget[position="a3"]').addClass('valid').attr('data-value', arr["a3"]).find('.value_input').val(arr["a3"]);
+    $('.widget[position="b3"]').addClass('valid').attr('data-value', arr["b3"]).find('.value_input').val(arr["b3"]);
+    $('.widget[position="a4"]').addClass('valid').attr('data-value', arr["a4"]).find('.value_input').val(arr["a4"]);
+    $('.widget[position="b4"]').addClass('valid').attr('data-value', arr["b4"]).find('.value_input').val(arr["b4"]);
 }
 
 // funcion que carga aleatoriamente los operadores
@@ -945,19 +941,19 @@ function remove_numbers(){
     
     // si escoge jugador se borran todos los tableros
     if(level == "player"){
-        $('.widget:not(.result)').removeClass('valid static').attr('data-value', '').find('.value_input').val('');
+        $('.widget:not(.result)').removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }else if(level == "intermediate"){
         position = Math.round(Math.random() * (positions_intermediate.length - 1));
         num = positions_intermediate[position];
         
         for(var i = 0; i < num.length; i++)
-            $('.widget:not(.result)').eq(num[i]).removeClass('valid static').attr('data-value', '').find('.value_input').val('');
+            $('.widget:not(.result)').eq(num[i]).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }else{
         position = Math.round(Math.random() * (positions_beginner.length - 1));
         num = positions_beginner[position];
         
         for(var i = 0; i < num.length; i++)
-            $('.widget:not(.result)').eq(num[i]).removeClass('valid static').attr('data-value', '').find('.value_input').val('');
+            $('.widget:not(.result)').eq(num[i]).removeClass('valid').attr('data-value', '').find('.value_input').val('');
     }
     
     var positions_widgets = [];
@@ -989,8 +985,6 @@ function restart_game(){
     
     for(var i = 0; i < widgets_positions.length; i++)
         $('.widget[position]').eq(widgets_positions[i].position).addClass('valid').attr('data-value', widgets_positions[i].value).find('.value_input').val(widgets_positions[i].value);
-        
-    time();
 }
 
 // funcion que despliega mensajes con el toast de materialize

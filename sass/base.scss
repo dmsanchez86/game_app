@@ -18,6 +18,8 @@ body{
 body{
     font-size: 100%;
     overflow: hidden;
+    @include perspective(1000px);
+    @include perspective-origin(50% 40%);
     @include gradient(radial, (center, $blue_primary, $blue_secondary));
 }
 
@@ -281,7 +283,10 @@ label{
         }
     }
     
-    &.valid{
+    &.valid:not(.static),
+    &.static{
+        cursor: no-drop;
+        
         &:before{
             display: none;
         }
@@ -289,6 +294,13 @@ label{
         &:after{
             background: $brown_secondary;
             @include box-shadow(( 0 0 5px rgba(0,0,0,.5) ));
+        }
+    }
+    &.valid:not(.static){
+         cursor: pointer;  
+         
+         &:before{
+            display: block;
         }
     }
     
@@ -345,7 +357,6 @@ label{
 .operator{
     background-image: url(../images/operators.png);
     background-size: 100%;
-    cursor: pointer;
     position: relative;
     @include transition(all .5s ease);
     
@@ -465,6 +476,7 @@ audio{
     @include flex(flex);
     @include align-items(center);
     @include justify-content(center);
+    @include transform-origin(center);
     @include transition(all .5s ease-in-out);
     
     .content{
